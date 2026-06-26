@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Membership — Global Impact Forum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --accent: #E84B26; --bg: #0a0a0a; --text: #ffffff; --muted: #888; --border: rgba(255,255,255,0.12); }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 18px 60px; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img { height: 52px; }
+  .nav-logo-text .t1 { font-size: 20px; font-weight: 800; color: #fff; display: block; }
+  .nav-logo-text .t2 { font-size: 10px; color: #aaa; letter-spacing: 0.14em; text-transform: uppercase; display: block; }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a { color: #ddd; text-decoration: none; font-size: 15px; font-weight: 500; }
+
+  .page-wrap { max-width: 920px; margin: 0 auto; padding: 160px 60px 100px; }
+  .breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 40px; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: #fff; }
+  .breadcrumb span { color: var(--accent); }
+
+  .plan-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: start; margin-bottom: 80px; }
+  .plan-hero-left h1 { font-size: clamp(36px, 4vw, 60px); font-weight: 900; line-height: 1.05; margin-bottom: 12px; }
+  .plan-hero-left h1 .red { color: var(--accent); }
+  .plan-hero-left .price { font-size: 48px; font-weight: 900; margin: 24px 0 8px; }
+  .plan-hero-left .price-note { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+  .plan-hero-left p { font-size: 16px; color: #ccc; line-height: 1.75; margin-bottom: 32px; }
+  .btn-fill { display: inline-block; padding: 16px 44px; background: var(--accent); color: #fff; text-decoration: none; font-size: 15px; font-weight: 600; letter-spacing: 0.04em; transition: opacity 0.2s; }
+  .btn-fill:hover { opacity: 0.85; }
+
+  .feature-box { background: #111; border: 1px solid var(--border); padding: 36px 32px; }
+  .feature-box h3 { font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 22px; }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+  .feature-list li { font-size: 14px; color: #ccc; padding-left: 20px; position: relative; line-height: 1.55; }
+  .feature-list li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
+  .add-ons { margin-top: 60px; }
+  .add-ons h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .add-ons h2 .red { color: var(--accent); }
+  .add-ons p { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+  .addon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .addon-card { border: 1px solid var(--border); padding: 24px 20px; background: #111; }
+  .addon-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .addon-card p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+  .addon-price { font-size: 18px; font-weight: 800; color: var(--accent); }
+
+  footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex; justify-content: space-between; }
+  footer p { font-size: 13px; color: #444; }
+  footer a { color: #444; text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; flex-direction: column; gap: 5px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; transition: transform 0.25s, opacity 0.2s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; position: relative; }
+    .nav-hamburger { display: flex; }
+    .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border); padding: 6px 0; z-index: 999; }
+    .nav-links.open { display: flex; }
+    .nav-links li a { display: block; padding: 14px 24px; font-size: 16px; }
+    .page-wrap { padding: 110px 20px 60px; }
+    .plan-hero { grid-template-columns: 1fr; gap: 36px; }
+    .add-ons { margin-top: 40px; }
+    .addon-grid { grid-template-columns: 1fr; }
+    footer { padding: 28px 20px; flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
+    <div class="nav-logo-text"><span class="t1">GLOBAL</span><span class="t2">Impact Forum</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="membership-landing.html">Membership</a></li>
+    <li><a href="contact.html">Contact Us</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="page-wrap">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="membership-landing.html">Membership</a> / <span>Premium</span></div>
+
+  <div class="plan-hero">
+    <div class="plan-hero-left">
+      <h1>Premium <span class="red">Membership</span></h1>
+      <p>The most exclusive tier of GIF — designed for leaders who want to shape global discourse, access international platforms, and be recognized among India's most influential voices.</p>
+      <div class="price">&#8377;5,50,000</div>
+      <div class="price-note">per year &middot; inclusive of GST</div>
+      <a href="ticket-selection.html" class="btn-fill">Proceed to Enroll &rarr;</a>
+    </div>
+    <div class="feature-box">
+      <h3>What's Included</h3>
+      <ul class="feature-list">
+        <li>Access to Annual India GIF Conclave</li>
+        <li>Access to Zurich International Conclave</li>
+        <li>Seat on a Sectoral Leadership Council</li>
+        <li>Elite cross-sector roundtables &amp; dialogues</li>
+        <li>Global diplomatic delegation access</li>
+        <li>GIF Leadership Archive &mdash; digital profile</li>
+        <li>Priority introductions &amp; deal-flow network</li>
+        <li>Thought leadership publication rights</li>
+        <li>GIF Brand Co-association rights</li>
+        <li>Recognition &amp; Global Leadership Awards eligibility</li>
+        <li>1-on-1 access to Advisory Board members</li>
+        <li>Member-only policy briefings &amp; intelligence</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="add-ons">
+    <h2>Optional <span class="red">Add-Ons</span></h2>
+    <p>Enhance your membership with curated supplementary experiences.</p>
+    <div class="addon-grid">
+      <div class="addon-card">
+        <h4>Extra Conclave Pass</h4>
+        <p>Bring a colleague or family member to the India Conclave.</p>
+        <div class="addon-price">&#8377;75,000</div>
+      </div>
+      <div class="addon-card">
+        <h4>GIF Leadership Spotlight</h4>
+        <p>Featured editorial in GIF's annual leadership publication.</p>
+        <div class="addon-price">&#8377;50,000</div>
+      </div>
+      <div class="addon-card">
+        <h4>Zurich Extra Pass</h4>
+        <p>Additional delegate seat at the Zurich International Conclave.</p>
+        <div class="addon-price">&#8377;1,25,000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Global Impact Forum. All rights reserved.</p>
+  <p><a href="index.html">Home</a> &nbsp;&middot;&nbsp; <a href="membership-landing.html">Membership</a> &nbsp;&middot;&nbsp; <a href="contact.html">Contact</a></p>
+</footer>
+<script>
+const h=document.getElementById('navHamburger'),n=document.querySelector('.nav-links');
+h.addEventListener('click',()=>{h.classList.toggle('open');n.classList.toggle('open');});
+n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{h.classList.remove('open');n.classList.remove('open');}));
+</script>
+</body>
+</html>

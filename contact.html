@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us — Global Impact Forum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --accent: #E84B26; --bg: #0a0a0a; --text: #ffffff; --muted: #888; --border: rgba(255,255,255,0.12); }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 18px 60px; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img { height: 52px; }
+  .nav-logo-text .t1 { font-size: 20px; font-weight: 800; color: #fff; display: block; }
+  .nav-logo-text .t2 { font-size: 10px; color: #aaa; letter-spacing: 0.14em; text-transform: uppercase; display: block; }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a { color: #ddd; text-decoration: none; font-size: 15px; font-weight: 500; }
+  .nav-links a:hover { color: #fff; }
+
+  .hero { padding: 160px 80px 70px; }
+  .hero h1 { font-size: clamp(40px, 5vw, 72px); font-weight: 900; line-height: 1.0; margin-bottom: 14px; }
+  .hero h1 .red { color: var(--accent); }
+  .hero p { font-size: 18px; color: var(--muted); max-width: 520px; line-height: 1.7; }
+
+  .contact-body { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; max-width: 1100px; padding: 60px 80px 120px; }
+  .info-col h2 { font-size: 20px; font-weight: 700; margin-bottom: 28px; }
+  .info-item { margin-bottom: 32px; }
+  .info-item h3 { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .info-item p, .info-item a { font-size: 15px; color: #ccc; line-height: 1.65; text-decoration: none; }
+  .info-item a:hover { color: #fff; }
+  .social-row { display: flex; gap: 14px; margin-top: 36px; }
+  .social-btn { padding: 10px 18px; border: 1px solid var(--border); color: #ccc; text-decoration: none; font-size: 13px; font-weight: 600; transition: border-color 0.2s, color 0.2s; }
+  .social-btn:hover { border-color: var(--accent); color: #fff; }
+
+  .cform { display: flex; flex-direction: column; gap: 20px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label { font-size: 11px; color: #666; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 600; }
+  .field input, .field textarea, .field select { background: #141414; border: 1px solid var(--border); color: #fff; padding: 13px 15px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; appearance: none; }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color: var(--accent); }
+  .field select option { background: #141414; }
+  .field textarea { resize: vertical; }
+  .btn-fill { padding: 16px; background: var(--accent); color: #fff; border: none; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; letter-spacing: 0.04em; transition: opacity 0.2s; }
+  .btn-fill:hover { opacity: 0.85; }
+  .success-msg { display: none; background: #111; border: 1px solid var(--accent); padding: 20px 24px; margin-top: 10px; }
+  .success-msg p { font-size: 15px; color: #ccc; }
+  .success-msg strong { color: var(--accent); }
+  .field input.invalid, .field textarea.invalid, .field select.invalid { border-color: var(--accent); }
+  .err { font-size: 11px; color: var(--accent); margin-top: 3px; display: none; }
+  .err.show { display: block; }
+
+  footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex; justify-content: space-between; }
+  footer p { font-size: 13px; color: #444; }
+  footer a { color: #444; text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; flex-direction: column; gap: 5px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; transition: transform 0.25s, opacity 0.2s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; position: relative; }
+    .nav-hamburger { display: flex; }
+    .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border); padding: 6px 0; z-index: 999; }
+    .nav-links.open { display: flex; }
+    .nav-links li a { display: block; padding: 14px 24px; font-size: 16px; }
+    .hero { padding: 110px 24px 40px; }
+    .contact-body { grid-template-columns: 1fr; gap: 40px; padding: 40px 20px 80px; }
+    .row2 { grid-template-columns: 1fr; }
+    footer { padding: 28px 20px; flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
+    <div class="nav-logo-text"><span class="t1">GLOBAL</span><span class="t2">Impact Forum</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="membership-landing.html">Membership</a></li>
+    <li><a href="contact.html" style="color:#fff">Contact Us</a></li>
+  </ul>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="hero">
+  <h1>Get In <span class="red">Touch</span></h1>
+  <p>Reach out for membership enquiries, partnership opportunities, or general questions.</p>
+</div>
+
+<div class="contact-body">
+  <div class="info-col">
+    <h2>Contact Information</h2>
+    <div class="info-item">
+      <h3>Headquarters</h3>
+      <p>Global Impact Forum<br>New Delhi, India</p>
+    </div>
+    <div class="info-item">
+      <h3>International Office</h3>
+      <p>GIF Zurich<br>Zurich, Switzerland</p>
+    </div>
+    <div class="info-item">
+      <h3>Email</h3>
+      <a href="mailto:connect@globalimpactforum.in">connect@globalimpactforum.in</a>
+    </div>
+    <div class="info-item">
+      <h3>Membership Enquiries</h3>
+      <a href="mailto:membership@globalimpactforum.in">membership@globalimpactforum.in</a>
+    </div>
+    <div class="social-row">
+      <a href="#" class="social-btn">LinkedIn</a>
+      <a href="#" class="social-btn">Twitter/X</a>
+      <a href="#" class="social-btn">Instagram</a>
+    </div>
+  </div>
+
+  <div class="form-col">
+    <form class="cform" onsubmit="submitForm(event)" novalidate>
+      <div class="row2">
+        <div class="field"><label>First Name *</label><input type="text" id="c-fname" placeholder="Rajesh"><span class="err" id="err-fname"></span></div>
+        <div class="field"><label>Last Name *</label><input type="text" id="c-lname" placeholder="Sharma"><span class="err" id="err-lname"></span></div>
+      </div>
+      <div class="field"><label>Email Address *</label><input type="email" id="c-email" placeholder="rajesh@company.com"><span class="err" id="err-email"></span></div>
+      <div class="field"><label>Phone Number</label><input type="tel" id="c-phone" placeholder="+91 98765 43210"><span class="err" id="err-phone"></span></div>
+      <div class="field">
+        <label>Enquiry Type *</label>
+        <select id="c-enquiry">
+          <option value="">Select a topic...</option>
+          <option>Membership Information</option>
+          <option>Partnership &amp; Collaboration</option>
+          <option>Event Registration</option>
+          <option>Media &amp; Press</option>
+          <option>General Enquiry</option>
+        </select>
+        <span class="err" id="err-enquiry"></span>
+      </div>
+      <div class="field"><label>Organisation</label><input type="text" id="c-org" placeholder="Your company or institution"></div>
+      <div class="field"><label>Message *</label><textarea id="c-msg" rows="5" placeholder="Tell us about your interest in GIF..."></textarea><span class="err" id="err-msg"></span></div>
+      <button type="submit" class="btn-fill">Send Message</button>
+    </form>
+    <div class="success-msg" id="successMsg">
+      <p><strong>Thank you for reaching out.</strong> A member of the GIF team will be in touch within 2 business days.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Global Impact Forum. All rights reserved.</p>
+  <p><a href="index.html">Home</a> &nbsp;&middot;&nbsp; <a href="membership-landing.html">Membership</a></p>
+</footer>
+
+<script>
+function submitForm(e) {
+  e.preventDefault();
+  let ok = true;
+
+  function req(id, errId, msg) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!el.value.trim()) {
+      el.classList.add('invalid'); err.textContent = msg; err.classList.add('show'); ok = false;
+    } else { el.classList.remove('invalid'); err.classList.remove('show'); }
+  }
+
+  req('c-fname', 'err-fname', 'First name is required.');
+  req('c-lname', 'err-lname', 'Last name is required.');
+  req('c-msg',   'err-msg',   'Please enter your message.');
+
+  // Email
+  const eEl = document.getElementById('c-email'), eErr = document.getElementById('err-email');
+  const eVal = eEl.value.trim();
+  if (!eVal) {
+    eEl.classList.add('invalid'); eErr.textContent = 'Email address is required.'; eErr.classList.add('show'); ok = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(eVal)) {
+    eEl.classList.add('invalid'); eErr.textContent = 'Enter a valid email address.'; eErr.classList.add('show'); ok = false;
+  } else { eEl.classList.remove('invalid'); eErr.classList.remove('show'); }
+
+  // Phone (optional)
+  const pEl = document.getElementById('c-phone'), pErr = document.getElementById('err-phone');
+  const pVal = pEl.value.trim();
+  if (pVal && !/^\+?[\d\s\-\(\)]{7,15}$/.test(pVal)) {
+    pEl.classList.add('invalid'); pErr.textContent = 'Enter a valid phone number.'; pErr.classList.add('show'); ok = false;
+  } else { pEl.classList.remove('invalid'); pErr.classList.remove('show'); }
+
+  // Enquiry type
+  const enEl = document.getElementById('c-enquiry'), enErr = document.getElementById('err-enquiry');
+  if (!enEl.value) {
+    enEl.classList.add('invalid'); enErr.textContent = 'Please select an enquiry type.'; enErr.classList.add('show'); ok = false;
+  } else { enEl.classList.remove('invalid'); enErr.classList.remove('show'); }
+
+  if (!ok) return;
+
+  e.target.style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+}
+
+// Clear errors on input
+['c-fname','c-lname','c-email','c-phone','c-enquiry','c-msg'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => {
+    el.classList.remove('invalid');
+    const err = document.getElementById('err-' + id.replace('c-',''));
+    if (err) err.classList.remove('show');
+  });
+});
+</script>
+<script>
+const h=document.getElementById('navHamburger'),n=document.querySelector('.nav-links');
+h.addEventListener('click',()=>{h.classList.toggle('open');n.classList.toggle('open');});
+n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{h.classList.remove('open');n.classList.remove('open');}));
+</script>
+</body>
+</html>

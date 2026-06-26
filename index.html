@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Impact Forum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #E84B26;
+    --bg: #0a0a0a;
+    --bg2: #141414;
+    --bg3: #1e1e1e;
+    --text: #ffffff;
+    --text-muted: #aaaaaa;
+    --border: rgba(255,255,255,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px;
+    height: 72px;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; overflow: hidden; height: 72px; }
+  .nav-logo img { height: 128px; width: 128px; object-fit: contain; flex-shrink: 0; }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .nav-logo-text .t1 { font-size: 14px; font-weight: 800; letter-spacing: 0.12em; color: #fff; text-transform: uppercase; }
+  .nav-logo-text .t2 { font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #aaa; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a { color: #ddd; text-decoration: none; font-size: 15px; font-weight: 500; transition: color 0.2s; }
+  .nav-apply { padding: 10px 22px; border: 1.5px solid var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; transition: background 0.2s; white-space: nowrap; }
+  .nav-apply:hover { background: var(--accent); }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+  /* HERO */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.92) 100%),
+                url('imgs/dc2a36c3790175848016eb95ff1294d9169d0834.png') center/cover no-repeat;
+    padding: 140px 80px 100px;
+  }
+  .hero-content { max-width: 980px; }
+  .hero h1 { font-size: clamp(48px, 6.5vw, 104px); font-weight: 800; line-height: 1.0; margin-bottom: 28px; letter-spacing: -0.025em; }
+  .hero-sub { font-size: clamp(16px, 1.8vw, 24px); font-weight: 500; color: #ddd; margin-bottom: 28px; }
+  .hero-desc { font-size: clamp(14px, 1.3vw, 17px); color: #bbb; line-height: 1.75; max-width: 720px; margin: 0 auto 56px; }
+  .hero-cta-label { font-size: clamp(22px, 2vw, 30px); font-weight: 700; margin-bottom: 22px; }
+  .btn-outline {
+    display: inline-block; padding: 15px 44px; border: 2px solid var(--accent);
+    color: #fff; text-decoration: none; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.05em; transition: background 0.2s;
+  }
+  .btn-outline:hover { background: var(--accent); }
+  .btn-fill {
+    display: inline-block; padding: 14px 36px;
+    background: var(--accent); border: 2px solid var(--accent);
+    color: #fff; text-decoration: none; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.04em; transition: opacity 0.2s; cursor: pointer; font-family: inherit;
+  }
+  .btn-fill:hover { opacity: 0.85; }
+
+  /* WHY GIF */
+  .why-gif {
+    position: relative; padding: 120px 80px;
+    background: #181818;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    overflow: hidden;
+  }
+  .why-watermark {
+    position: absolute; left: -60px; top: 50%; transform: translateY(-50%);
+    width: 480px; opacity: 0.06; pointer-events: none;
+  }
+  .why-left { position: relative; z-index: 1; }
+  .why-left h2 { font-size: clamp(52px, 5.5vw, 88px); font-weight: 900; line-height: 0.95; margin-bottom: 20px; }
+  .why-left h2 .red { color: var(--accent); }
+  .why-left h3 { font-size: 21px; font-weight: 500; color: #bbb; line-height: 1.45; }
+  .why-right p { font-size: 16px; line-height: 1.8; color: #ccc; margin-bottom: 22px; }
+  .why-right p:last-child { margin-bottom: 0; }
+
+  /* WHAT GIF DOES */
+  .what-does { background: #0a0a0a; padding: 80px 60px; }
+  .what-grid {
+    display: grid;
+    grid-template-areas:
+      "c1 circle c2"
+      "c3 circle c4";
+    grid-template-columns: 1fr 520px 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .wcard { border: 1px solid rgba(255,255,255,0.12); padding: 28px 26px; margin: 16px; }
+  .wcard-num { font-size: 52px; font-weight: 900; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+  .wcard-title { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+  .wcard-desc { font-size: 14px; color: #aaa; line-height: 1.7; }
+  .circle-wrap { grid-area: circle; display: flex; align-items: center; justify-content: center; }
+  .target {
+    position: relative; width: 500px; height: 500px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  }
+  .ring { position: absolute; border-radius: 50%; }
+  .ring:nth-child(1) { inset: 0; background: #2e2e2e; }
+  .ring:nth-child(2) { inset: 10%; background: #404040; }
+  .ring:nth-child(3) { inset: 20%; background: #606060; }
+  .ring:nth-child(4) { inset: 32%; background: #e0e0e0; }
+  .ring-text { position: relative; z-index: 5; font-size: 20px; font-weight: 700; color: #111; text-align: center; line-height: 1.3; padding: 0 8px; }
+
+  /* INSTITUTION BUILDING */
+  .inst-build {
+    min-height: 320px;
+    background: linear-gradient(to right, rgba(15,15,15,0.97) 48%, rgba(10,10,10,0.2) 100%),
+                url('imgs/0dcf59725e7aea2e4bb8bf5902b2c33828adb036.jpg') right center/cover no-repeat;
+    display: flex; align-items: center;
+    padding: 80px;
+  }
+  .inst-build p {
+    font-size: clamp(18px, 2.2vw, 30px); font-weight: 600; line-height: 1.55;
+    color: #eee; max-width: 600px;
+  }
+  .inst-build .red { color: var(--accent); font-weight: 800; }
+
+  /* COMMUNITY ARCH */
+  .community { padding: 100px 60px; background: #0a0a0a; }
+  .sec-title { font-size: clamp(28px, 3.2vw, 48px); font-weight: 800; margin-bottom: 56px; line-height: 1.1; }
+  .sec-title .red { color: var(--accent); }
+  .com-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .com-card {
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 3px;
+    overflow: hidden; position: relative; min-height: 380px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .com-img {
+    position: absolute; inset: 0;
+    background: #222 center/cover no-repeat;
+    filter: brightness(0.45) grayscale(0.2);
+  }
+  .com-body {
+    position: relative; z-index: 1; padding: 22px 18px;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 100%);
+  }
+  .com-body h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .com-body p { font-size: 13px; color: #ccc; line-height: 1.65; }
+
+  /* ANCHORED BY */
+  .anchored {
+    min-height: 480px;
+    background: linear-gradient(to right, rgba(10,10,10,0.15) 40%, rgba(10,10,10,0.95) 65%),
+                url('imgs/01e222d4492d19cf2120b2d68c8dfc4df38b5c16.jpg') left center/cover no-repeat;
+    display: flex; align-items: center; justify-content: flex-end;
+  }
+  .anchored-txt { max-width: 520px; padding: 80px; text-align: right; }
+  .anchored-txt h2 { font-size: clamp(28px, 3vw, 48px); font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+  .anchored-txt h2 .red { color: var(--accent); }
+  .anchored-txt h3 { font-size: 18px; font-weight: 600; color: #ddd; margin-bottom: 14px; }
+  .anchored-txt p { font-size: 15px; color: #aaa; line-height: 1.7; }
+
+  /* ADVISORY */
+  .advisory { padding: 80px 0 80px; background: #181818; overflow: hidden; }
+  .adv-heading {
+    text-align: center; font-size: 20px; font-weight: 600; color: #ddd;
+    margin-bottom: 48px; display: flex; align-items: center; gap: 20px;
+    padding: 0 60px;
+  }
+  .adv-heading::before, .adv-heading::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.18); }
+  .adv-heading .red { color: var(--accent); }
+  .adv-carousel-wrap { position: relative; }
+  .adv-track-outer { overflow: hidden; padding: 0 60px; cursor: grab; user-select: none; }
+  .adv-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+  .adv-card { flex: 0 0 calc(22% - 15px); min-width: 0; text-align: center; }
+  .adv-photo {
+    width: 100%; aspect-ratio: 3/4;
+    background: #222 center/cover no-repeat;
+    border-radius: 4px; margin-bottom: 14px;
+    filter: grayscale(1) brightness(0.8);
+  }
+  .adv-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: #fff; }
+  .adv-role { font-size: 10px; color: #888; letter-spacing: 0.07em; text-transform: uppercase; line-height: 1.5; max-width: 140px; margin: 0 auto; }
+  .adv-dots { display: flex; justify-content: center; gap: 8px; margin-top: 36px; }
+  .adv-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: none; cursor: pointer; transition: background 0.2s;
+  }
+  .adv-dot.on { background: var(--accent); }
+  .adv-btn {
+    position: absolute; top: 40%; transform: translateY(-50%);
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.2);
+    color: #fff; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: background 0.2s;
+    z-index: 2;
+  }
+  .adv-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .adv-prev { left: 18px; }
+  .adv-next { right: 18px; }
+
+  /* THREE PHASE */
+  .growth { padding: 100px 60px; background: #0a0a0a; }
+  .growth .sec-title { margin-bottom: 12px; }
+  .growth-sub { font-size: 17px; color: #777; margin-bottom: 80px; }
+  .phases { display: flex; flex-direction: column; gap: 60px; }
+  .phase-row { display: flex; align-items: center; gap: 60px; }
+  .phase-row.right { flex-direction: row-reverse; }
+  .phase-circle {
+    flex-shrink: 0; width: 190px; height: 190px; border-radius: 50%;
+    background: #e8e8e8;
+    box-shadow: 0 0 0 14px #555, 0 0 0 26px #3a3a3a, 0 0 0 36px #252525;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; margin: 20px;
+    font-size: 20px; font-weight: 700; color: #111; line-height: 1.3;
+  }
+  .phase-info {}
+  .phase-tag { font-size: 13px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; margin-bottom: 8px; }
+  .phase-desc { font-size: 15px; color: #aaa; line-height: 1.7; max-width: 400px; }
+  .phase-row.right .phase-info { text-align: right; }
+  .phase-row.right .phase-desc { margin-left: auto; }
+  .phase-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); margin-left: 40px; }
+
+  /* MEMBERSHIP */
+  .membership { padding: 100px 60px; background: #181818; }
+  .mem-header { text-align: left; margin-bottom: 56px; }
+  .mem-header h2 { font-size: clamp(32px, 3.8vw, 56px); font-weight: 800; margin-bottom: 8px; }
+  .mem-header h2 .red { color: var(--accent); }
+  .mem-header .sub { font-size: 17px; color: #aaa; margin-bottom: 6px; font-style: italic; }
+  .mem-header p { font-size: 15px; color: #888; max-width: 480px; line-height: 1.6; }
+  .mem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .mem-card {
+    border: 1px solid rgba(255,255,255,0.13); padding: 36px 30px;
+    background: #111; display: flex; flex-direction: column; gap: 18px;
+  }
+  .mem-card h3 { font-size: 20px; font-weight: 800; color: var(--accent); line-height: 1.25; }
+  .mem-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .mem-list li { font-size: 14px; color: #bbb; padding-left: 14px; position: relative; line-height: 1.55; }
+  .mem-list li::before { content:'•'; position: absolute; left: 0; color: #555; }
+  .mem-price { font-size: 30px; font-weight: 800; margin-top: auto; }
+
+  /* CONTACT */
+  .contact { padding: 100px 60px; background: #0a0a0a; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 80px; align-items: start; }
+  .contact-left h2 { font-size: clamp(28px, 3vw, 44px); font-weight: 800; margin-bottom: 18px; }
+  .contact-left h2 .red { color: var(--accent); }
+  .contact-left p { font-size: 16px; color: #888; line-height: 1.7; }
+  .cform { display: flex; flex-direction: column; gap: 18px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label { font-size: 12px; color: #777; letter-spacing: 0.08em; text-transform: uppercase; }
+  .field input, .field textarea {
+    background: #181818; border: 1px solid rgba(255,255,255,0.12);
+    color: #fff; padding: 13px 15px; font-size: 14px; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); }
+  .field textarea { resize: vertical; }
+
+  /* WHY GIF IS DIFFERENT */
+  .why-different { padding: 100px 60px; background: #0f0f0f; }
+  .wd-inner { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; max-width: 1280px; margin: 0 auto; }
+  .wd-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+  .wd-left h2 { font-size: clamp(36px, 4vw, 60px); font-weight: 900; line-height: 1.05; position: sticky; top: 120px; }
+  .wd-right { display: flex; flex-direction: column; gap: 0; }
+  .wd-item { display: flex; gap: 28px; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .wd-item:first-child { padding-top: 0; }
+  .wd-num { font-size: 42px; font-weight: 900; color: rgba(255,255,255,0.08); line-height: 1; flex-shrink: 0; width: 60px; }
+  .wd-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .wd-body p { font-size: 15px; color: #999; line-height: 1.75; }
+
+
+  /* WHAT MEMBERS UNLOCK + WHO IS GIF FOR */
+  .unlock-section {
+    display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0;
+    background: #0e0e0e; padding: 100px 80px;
+  }
+  .unlock-col { padding: 0 40px; }
+  .unlock-col:first-child { padding-left: 0; }
+  .unlock-col:last-child { padding-right: 0; }
+  .unlock-divider { background: rgba(255,255,255,0.1); }
+  .unlock-heading { font-size: clamp(24px, 2.8vw, 38px); font-weight: 800; margin-bottom: 36px; }
+  .accordion { display: flex; flex-direction: column; gap: 0; }
+  .acc-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .acc-btn {
+    width: 100%; display: flex; align-items: center; gap: 16px;
+    background: none; border: none; color: #fff; cursor: pointer;
+    padding: 18px 0; text-align: left; font-family: inherit;
+  }
+  .acc-num {
+    width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0;
+  }
+  .acc-label { flex: 1; font-size: 15px; font-weight: 600; color: #ddd; line-height: 1.4; }
+  .acc-icon { font-size: 22px; color: var(--accent); font-weight: 300; flex-shrink: 0; transition: transform 0.2s; }
+  .acc-item.open .acc-icon { transform: rotate(45deg); }
+  .acc-body {
+    display: none; padding: 0 0 18px 64px;
+    font-size: 14px; color: #888; line-height: 1.7;
+  }
+  .acc-item.open .acc-body { display: block; }
+
+  /* LEGACY QUOTE + CTA */
+  .legacy-cta {
+    background: #000; min-height: 560px; display: flex; align-items: center;
+    justify-content: center; position: relative; overflow: hidden;
+    text-align: center; padding: 100px 60px;
+  }
+  .legacy-globe {
+    position: absolute; left: -80px; top: 50%; transform: translateY(-50%);
+    width: 520px; opacity: 0.12; pointer-events: none;
+  }
+  .legacy-globe img { width: 100%; filter: brightness(0) invert(1); }
+  .legacy-content { position: relative; z-index: 1; max-width: 780px; }
+  .legacy-quote {
+    font-size: clamp(24px, 3vw, 42px); font-weight: 700; line-height: 1.35;
+    color: #fff; margin-bottom: 32px; font-style: normal;
+  }
+  .legacy-divider { width: 120px; height: 2px; background: #fff; margin: 0 auto 36px; }
+  .legacy-join {
+    font-size: clamp(28px, 4vw, 56px); font-weight: 900; letter-spacing: 0.04em;
+    margin-bottom: 40px; line-height: 1.1;
+  }
+
+  /* GLOBAL FOOTPRINT */
+  .footprint { padding: 100px 60px; background: #0a0a0a; }
+  .footprint-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; max-width: 1280px; margin: 0 auto; }
+  .fp-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .footprint-left h2 { font-size: clamp(36px, 4vw, 60px); font-weight: 900; line-height: 1.05; margin-bottom: 18px; }
+  .footprint-left p { font-size: 16px; color: #888; line-height: 1.75; margin-bottom: 48px; }
+  .fp-stats { display: flex; gap: 36px; }
+  .fp-stat { display: flex; flex-direction: column; gap: 6px; }
+  .fp-n { font-size: 36px; font-weight: 900; color: #fff; }
+  .fp-l { font-size: 12px; color: #666; line-height: 1.5; }
+  .footprint-right { display: flex; align-items: center; justify-content: center; }
+  .globe-img { width: 100%; max-width: 480px; opacity: 0.85; filter: drop-shadow(0 0 60px rgba(100,200,150,0.15)); }
+
+  /* FOOTER */
+  .footer { background: #080808; border-top: 1px solid rgba(255,255,255,0.08); padding: 56px 60px; display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 40px; }
+  .footer-brand-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 16px; }
+  .footer-brand-logo img { height: 42px; }
+  .footer-brand-logo span { font-size: 16px; font-weight: 800; color: #fff; }
+  .footer-brand p { font-size: 13px; color: #444; line-height: 1.75; max-width: 260px; }
+  .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #666; margin-bottom: 18px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .footer-col ul a { color: #444; text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .footer-col ul a:hover { color: #fff; }
+  .footer-bottom { padding: 20px 60px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; }
+  .footer-bottom p { font-size: 12px; color: #333; }
+
+  /* FRAMEWORK */
+  .framework { display: grid; grid-template-columns: 1fr 1fr; background: #0f0f0f; }
+  .framework-img { overflow: hidden; max-height: 500px; }
+  .framework-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3) brightness(0.8); display: block; }
+  .framework-text { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; background: #141414; }
+  .fw-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
+  .framework-text h2 { font-size: clamp(22px, 2.6vw, 38px); font-weight: 800; line-height: 1.3; margin-bottom: 20px; }
+  .framework-text p { font-size: 15px; color: #aaa; line-height: 1.8; }
+
+  /* GIF SUMMIT */
+  .gif-summit { background: #0a0a0a; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 56px 80px; position: relative; overflow: hidden; }
+  #summitWave { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.7; }
+  .summit-inner { display: flex; align-items: center; justify-content: space-between; gap: 48px; max-width: 1200px; margin: 0 auto; }
+  .summit-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
+  .summit-left h2 { font-size: clamp(26px, 3vw, 44px); font-weight: 900; margin-bottom: 10px; }
+  .summit-left p { font-size: 15px; color: #888; max-width: 480px; line-height: 1.65; }
+
+  /* MANDATE HEADER */
+  .mandate-header { text-align: center; max-width: 760px; margin: 0 auto 60px; }
+  .mandate-sub { font-size: 18px; font-weight: 600; color: #ccc; margin: 14px 0 12px; }
+  .mandate-desc { font-size: 15px; color: #666; line-height: 1.75; }
+
+  /* ANCHORED NEW */
+  .anchored-new { display: grid; grid-template-columns: 1fr 1fr; background: #0f0f0f; min-height: 480px; }
+  .anchored-new-left { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; }
+  .anchored-new-left h2 { font-size: clamp(24px, 2.8vw, 40px); font-weight: 900; line-height: 1.25; margin-bottom: 22px; }
+  .anchored-bold { font-size: 16px; font-weight: 700; color: #ddd; margin-bottom: 18px; }
+  .anchored-new-left p { font-size: 15px; color: #888; line-height: 1.75; margin-bottom: 14px; }
+  .anchored-new-right { position: relative; overflow: hidden; }
+  .anchored-img { width: 100%; height: 100%; object-fit: cover; object-position: center; filter: grayscale(0.2) brightness(0.7); display: block; }
+  .anchored-badge { position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.85); border: 1px solid var(--border); padding: 6px 14px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: #fff; }
+
+  /* MEMBERSHIP NOTE */
+  .mem-footer-note { text-align: center; font-size: 14px; color: #555; margin-top: 32px; line-height: 1.65; }
+
+  /* PORTFOLIO */
+  .portfolio { padding: 100px 60px; background: #0a0a0a; }
+  .port-sub { font-size: 16px; color: #666; margin-bottom: 48px; margin-top: 10px; }
+  .port-track { position: relative; overflow: hidden; height: 580px; }
+  .port-dots { display: flex; gap: 8px; margin-top: 28px; }
+  .port-img-card {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+  .port-img-card.active {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .port-img-card.exit {
+    transform: translateX(-100%);
+  }
+  .port-img-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* LEGACY LOGOS */
+  .legacy-logos { margin-top: 48px; display: flex; justify-content: center; align-items: center; gap: 28px; }
+  .legacy-logos img { height: 128px; width: 128px; object-fit: contain; opacity: 0.45; filter: brightness(0) invert(1); }
+
+  /* FOOTER SIMPLE */
+  .footer-simple { background: #080808; border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 60px; text-align: center; }
+  .footer-simple p { font-size: 12px; color: #333; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* HAMBURGER */
+  .nav-hamburger {
+    display: none; background: none; border: none; cursor: pointer;
+    padding: 6px; flex-direction: column; gap: 5px;
+  }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; transition: transform 0.25s, opacity 0.2s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ======== TABLET / MOBILE ======== */
+  @media (max-width: 768px) {
+
+    /* NAV */
+    nav { padding: 14px 20px; position: relative; }
+    .nav-hamburger { display: flex; }
+    .nav-apply { display: none; }
+    .nav-links {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border);
+      padding: 6px 0; z-index: 999;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li a { display: block; padding: 14px 24px; font-size: 16px; }
+
+    /* HERO */
+    .hero { padding: 100px 24px 60px; }
+
+    /* WHY GIF */
+    .why-gif { grid-template-columns: 1fr; padding: 60px 24px; gap: 36px; }
+    .why-watermark { display: none; }
+
+    /* WHAT DOES */
+    .what-does { padding: 60px 20px; }
+    .what-grid {
+      grid-template-areas: "circle" "c1" "c2" "c3" "c4";
+      grid-template-columns: 1fr; grid-template-rows: auto;
+    }
+    .wcard { margin: 8px 0; }
+    .target { width: 200px; height: 200px; margin: 0 auto; }
+    .ring-text { font-size: 16px; }
+
+    /* INST BUILD */
+    .inst-build { padding: 48px 24px; }
+
+    /* COMMUNITY */
+    .community { padding: 60px 20px; }
+    .com-grid { grid-template-columns: 1fr 1fr; }
+    .com-card { min-height: 240px; }
+
+    /* ANCHORED */
+    .anchored {
+      min-height: 520px;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.15) 38%, rgba(10,10,10,1) 60%),
+        url('imgs/01e222d4492d19cf2120b2d68c8dfc4df38b5c16.jpg') center top / 100% auto no-repeat;
+      background-color: #0a0a0a;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+    .anchored-txt { padding: 28px 24px 32px; text-align: left; max-width: 100%; }
+
+    /* ADVISORY */
+    .advisory { padding: 60px 0; }
+    .adv-heading { padding: 0 16px; font-size: 16px; }
+    .adv-track-outer { padding: 0 16px; }
+    .adv-track { gap: 10px; }
+    .adv-card { flex: 0 0 calc((100vw - 52px) / 3); }
+    .adv-name { font-size: 12px; }
+    .adv-role { font-size: 9px; }
+
+    /* GROWTH */
+    .growth { padding: 60px 20px; }
+    .phase-row, .phase-row.right { flex-direction: column; align-items: center; text-align: center; gap: 24px; }
+    .phase-row.right .phase-info { text-align: center; }
+    .phase-row.right .phase-desc { margin-left: 0; }
+    .phase-divider { display: none; }
+
+    /* MEMBERSHIP */
+    .membership { padding: 60px 20px; }
+    .mem-header { text-align: left; }
+    .mem-header p { margin-left: 0; max-width: 100%; }
+    .mem-grid { grid-template-columns: 1fr; }
+
+    /* WHY DIFFERENT */
+    .why-different { padding: 60px 20px; }
+    .wd-inner { grid-template-columns: 1fr; gap: 36px; }
+    .wd-left h2 { position: static; }
+
+    /* UNLOCK */
+    .unlock-section { grid-template-columns: 1fr; padding: 60px 20px; gap: 48px; }
+    .unlock-divider { display: none; }
+    .unlock-col { padding: 0; }
+
+    /* FRAMEWORK */
+    .framework { grid-template-columns: 1fr; }
+    .framework-img { max-height: 220px; }
+    .framework-text { padding: 48px 24px; }
+
+    /* GIF SUMMIT */
+    .gif-summit { padding: 48px 24px; }
+    .summit-inner { flex-direction: column; align-items: flex-start; gap: 24px; }
+
+    /* ANCHORED NEW */
+    .anchored-new { grid-template-columns: 1fr; }
+    .anchored-new-left { padding: 48px 24px; }
+    .anchored-new-right { min-height: 260px; }
+
+    /* PORTFOLIO */
+    .portfolio { padding: 60px 20px; }
+    .port-track { height: 260px; }
+    .port-img-card img { object-fit: contain; object-position: center; background: #0a0a0a; }
+
+    /* LEGACY */
+    .legacy-cta { padding: 60px 24px; }
+    .legacy-globe { display: none; }
+
+    /* FOOTER SIMPLE */
+    .footer-simple { padding: 20px; }
+  }
+
+  /* SMALL PHONES */
+  @media (max-width: 480px) {
+    .com-grid { grid-template-columns: 1fr; }
+
+    .row2 { grid-template-columns: 1fr; }
+    .phase-circle { width: 150px; height: 150px; font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
+    <div class="nav-logo-text">
+      <span class="t1">GLOBAL</span>
+      <span class="t2">Impact Forum</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="https://www.apglobale.com/contact-us/" target="_blank">Contact Us</a></li>
+  </ul>
+  <a href="membership-landing.html" class="nav-apply">Book your Seat</a>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>The Vanguard of Global Leadership</h1>
+    <p class="hero-sub">Guided by Purpose &bull; Defined by Health &amp; Wealth</p>
+    <p class="hero-desc">The Global Impact Forum is an institutional architecture connecting business visionaries, policymakers, diplomats, investors, and academic actors. Together, we drive ethical wealth creation, champion civilisational leadership, and engineer enduring global impact.</p>
+    <p class="hero-cta-label">Join The Forum</p>
+    <a href="membership-landing.html" class="btn-outline">Book your Seat</a>
+  </div>
+</section>
+
+<!-- WHY GIF -->
+<section class="why-gif">
+  <img class="why-watermark" src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="">
+  <div class="why-left">
+    <h2>Why <span class="red">GIF</span></h2>
+    <h3>Why Global Impact Forum?<br>Why Now?</h3>
+  </div>
+  <div class="why-right">
+    <p>The world is entering an era of profound transformation. Geo-economic turbulence, climate imperatives, technological disruption, and supply-chain realignments are rapidly redefining global power structures.</p>
+    <p>Where others see uncertainty, we establish clarity. The Global Impact Forum fills a critical global gap: not by hosting transient events, but by building enduring leadership communities that actively shape high-level dialogue, policy thinking, and collaborative international actions.</p>
+  </div>
+</section>
+
+<!-- THE FRAMEWORK -->
+<section class="framework">
+  <div class="framework-img">
+    <img src="imgs/5 1000.png" alt="GIF Zurich 2026">
+  </div>
+  <div class="framework-text">
+    <div class="fw-tag">The Framework</div>
+    <h2>Anchored in the holistic principles of <span class="red">Health, Wealth,</span> and <span class="red">Purpose (HWP)</span></h2>
+    <p>The Forum creates world-class content, facilitates exclusive high-tier connections, and streamlines systemic transactions that drive positive, measurable global impact.</p>
+  </div>
+</section>
+
+<!-- GIF SUMMIT -->
+<section class="gif-summit">
+  <canvas id="summitWave"></canvas>
+  <div class="summit-inner">
+    <div class="summit-left">
+      <div class="summit-tag">Upcoming</div>
+      <h2>The <span class="red">GIF Summit</span></h2>
+      <p>Request a seat among global architects at our upcoming high-level ticketed convergence:</p>
+    </div>
+    <a href="ticket-selection.html" class="btn-fill">Book your Seat</a>
+  </div>
+</section>
+
+<!-- MANDATE & CORE PILLARS -->
+<section class="what-does">
+  <div class="mandate-header">
+    <h2 class="sec-title">The Mandate &amp; <span class="red">Core Pillars</span></h2>
+    <p class="mandate-sub">The Core Idea: Institution-Building for Generational Impact</p>
+    <p class="mandate-desc">An institution-building initiative meticulously engineered for generational legacy, we harness and transcend temporary networks to forge permanent infrastructure for global progress.</p>
+  </div>
+  <div class="what-grid">
+    <div class="wcard" style="grid-area:c1;align-self:end;">
+      <div class="wcard-num">01</div>
+      <div class="wcard-title">Connect Leaders</div>
+      <div class="wcard-desc">Convening the world's most influential minds across business, public policy, international diplomacy, academia, and private capital into structured, meaningful dialogue.</div>
+    </div>
+    <div class="circle-wrap">
+      <div class="target">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <div class="ring-text">The Four<br>Strategic<br>Pillars</div>
+      </div>
+    </div>
+    <div class="wcard" style="grid-area:c2;align-self:end;">
+      <div class="wcard-num">02</div>
+      <div class="wcard-title">Position India</div>
+      <div class="wcard-desc">Establishing India as a foundational civilisational thought leader, projecting profound strategic insight and economic influence onto the global stage.</div>
+    </div>
+    <div class="wcard" style="grid-area:c3;align-self:start;">
+      <div class="wcard-num">03</div>
+      <div class="wcard-title">Global Extension</div>
+      <div class="wcard-desc">Leveraging our strategic hub, GIF Zurich, as the primary conduit for international engagement, cross-border diplomacy, and global outreach.</div>
+    </div>
+    <div class="wcard" style="grid-area:c4;align-self:start;">
+      <div class="wcard-num">04</div>
+      <div class="wcard-title">Drive Action</div>
+      <div class="wcard-desc">Systematically translating high-level conversations into tangible initiatives, joint ventures, sovereign projects, and measurable macro-economic outcomes.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ANCHORED BY — NEW LAYOUT -->
+<section class="anchored-new">
+  <div class="anchored-new-left">
+    <h2>Anchored By Visionary Leadership:<br><span class="red">The Global Advisory Councils</span></h2>
+    <p class="anchored-bold">Uncompromising governance. Unparalleled foresight.</p>
+    <p>The Forum operates under the strict strategic guidance, credibility, and long-term vision of our Global Advisory Councils. GIF is guided by nationally and globally respected leaders spanning global governance, international diplomacy, macro-economic public policy, corporate excellence, and sustainable global development.</p>
+    <p>These custodians ensure our initiatives align with the highest standards of international diplomacy and economic progress.</p>
+  </div>
+  <div class="anchored-new-right">
+    <img src="imgs/7 1.png" alt="GIF Advisory" class="anchored-img">
+  </div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section class="membership">
+  <div class="mem-header">
+    <h2>GIF <span class="red">Membership</span></h2>
+    <p class="sub">An Investment in Influence</p>
+    <p>More than a membership. A gateway to access, credibility, and global influence.</p>
+  </div>
+  <div class="mem-grid">
+    <div class="mem-card">
+      <h3>Premium Membership</h3>
+      <ul class="mem-list">
+        <li>International conclave access</li>
+        <li>Elite forums &amp; delegations</li>
+        <li>Global leadership visibility</li>
+      </ul>
+      <div class="mem-price">Rs. 5.50 Lakh</div>
+      <a href="plan1.html" class="btn-fill">Get Started</a>
+    </div>
+    <div class="mem-card">
+      <h3>Annual Membership</h3>
+      <ul class="mem-list">
+        <li>Forums &amp; conclaves</li>
+        <li>Policy &amp; business networking</li>
+        <li>Thought leadership access</li>
+      </ul>
+      <div class="mem-price">Rs. 1 Lakh</div>
+      <a href="plan2.html" class="btn-fill">Get Started</a>
+    </div>
+    <div class="mem-card">
+      <h3>Y-GIF Membership</h3>
+      <ul class="mem-list">
+        <li>Y-GIF leadership track</li>
+        <li>Mentorship &amp; global exposure</li>
+      </ul>
+      <div class="mem-price">Rs. 1 Lakh</div>
+      <a href="plan2.html" class="btn-fill">Get Started</a>
+    </div>
+  </div>
+  <p class="mem-footer-note">This physical emblem reinforces your commitment to global impact and provides a distinct identity within the GIF community.</p>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="events">
+  <h2 class="sec-title">The Ecosystem Portfolio: <span class="red">The APG Global Portfolio</span></h2>
+  <p class="port-sub">A comprehensive, interconnected ecosystem driving global progress across critical sectors.</p>
+  <div class="port-track" id="portTrack">
+    <div class="port-img-card"><img src="imgs/Property 1=1.png" alt="Portfolio 1"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=2.png" alt="Portfolio 2"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=3.png" alt="Portfolio 3"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=4.png" alt="Portfolio 4"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=5.png" alt="Portfolio 5"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=6.png" alt="Portfolio 6"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=7.png" alt="Portfolio 7"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=8.png" alt="Portfolio 8"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=9.png" alt="Portfolio 9"></div>
+    <div class="port-img-card"><img src="imgs/Property 1=10.png" alt="Portfolio 10"></div>
+  </div>
+  <div class="port-dots" id="portDots">
+    <button class="adv-dot on"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+    <button class="adv-dot"></button>
+  </div>
+</section>
+
+<!-- LEGACY QUOTE + CTA -->
+<section class="legacy-cta">
+  <div class="legacy-globe">
+    <img src="imgs/289d90a1f3924452c166993e858f8f379eac7832.png" alt="">
+  </div>
+  <div class="legacy-content">
+    <blockquote class="legacy-quote">
+      "We are not building an <span class="red">organisation.</span><br>
+      We are stewarding a <span class="red">legacy.</span>"
+    </blockquote>
+    <div class="legacy-divider"></div>
+    <h2 class="legacy-join">JOIN GLOBAL <span class="red">IMPACT FORUM</span></h2>
+    <a href="membership-landing.html" class="btn-outline">Book your Seat</a>
+    <div class="legacy-logos">
+      <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer-simple">
+  <p>&copy; 2026 GLOBAL IMPACT FORUM</p>
+</div>
+
+<script>
+// Portfolio slideshow
+(function() {
+  const cards = document.querySelectorAll('#portTrack .port-img-card');
+  const dots = document.querySelectorAll('#portDots .adv-dot');
+  let current = 0;
+  let animating = false;
+
+  function goTo(i) {
+    if (animating) return;
+    const next = (i + cards.length) % cards.length;
+    if (next === current) return;
+    animating = true;
+    const prev = current;
+    current = next;
+    dots[prev].classList.remove('on');
+    dots[current].classList.add('on');
+    // slide new card in from right, push old card out to left simultaneously
+    cards[current].classList.add('active');
+    cards[prev].classList.add('exit');
+    setTimeout(() => {
+      cards[prev].style.transition = 'none';
+      cards[prev].classList.remove('active', 'exit');
+      cards[prev].offsetHeight; // force reflow so snap is instant
+      cards[prev].style.transition = '';
+      animating = false;
+    }, 660);
+  }
+
+  cards[0].classList.add('active');
+  dots[0].classList.add('on');
+  dots.forEach((dot, i) => dot.addEventListener('click', () => { goTo(i); }));
+  setInterval(() => goTo(current + 1), 4000);
+})();
+
+// Hamburger
+const hamburger = document.getElementById('navHamburger');
+const navLinks = document.querySelector('.nav-links');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hamburger.classList.remove('open');
+  navLinks.classList.remove('open');
+}));
+
+// PIXEL WAVE — GIF Summit
+(function() {
+  const canvas = document.getElementById('summitWave');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const R = 232, G = 75, B = 38;
+  const GRID = 14;
+  const SPEED = 2.8;
+  const TRAIL = 180;
+  const PAUSE = 160;
+  let W, H, front = -80, waiting = 0;
+  let cells = [];
+
+  function seed() {
+    cells = [];
+    const cols = Math.ceil(W / GRID);
+    const rows = Math.ceil(H / GRID);
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const hash = Math.sin(c * 127.1 + r * 311.7) * 43758.5;
+        const rnd = hash - Math.floor(hash);
+        if (rnd > 0.52) continue;
+        const sz = rnd < 0.12 ? GRID - 2 : rnd < 0.32 ? Math.floor(GRID * 0.55) : Math.floor(GRID * 0.3);
+        const bright = rnd < 0.08;
+        const vy = r / rows;
+        const density = 1 - Math.abs(vy - 0.5) * 1.4;
+        if (density < 0) continue;
+        cells.push({ x: c * GRID, y: r * GRID, sz, bright, density, flicker: Math.sin(c * 3.7 + r * 5.3) });
+      }
+    }
+  }
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+    seed();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    if (waiting > 0) { waiting--; requestAnimationFrame(draw); return; }
+    front += SPEED;
+    if (front > W + 40) { front = -80; waiting = PAUSE; requestAnimationFrame(draw); return; }
+    const now = performance.now() * 0.001;
+    for (const p of cells) {
+      const dx = front - p.x;
+      if (dx < 0 || dx > TRAIL) continue;
+      const frontEdge = Math.min(1, dx / 30);
+      const trailFade = Math.pow(1 - dx / TRAIL, 1.2);
+      let alpha = frontEdge * trailFade * p.density;
+      if (p.bright) {
+        alpha = Math.min(1, alpha * (1 + 0.3 * Math.sin(now * 3 + p.flicker)));
+        const glow = ctx.createRadialGradient(p.x + p.sz/2, p.y + p.sz/2, 0, p.x + p.sz/2, p.y + p.sz/2, p.sz * 2.5);
+        glow.addColorStop(0, `rgba(${R},${G},${B},${alpha * 0.6})`);
+        glow.addColorStop(1, `rgba(${R},${G},${B},0)`);
+        ctx.fillStyle = glow;
+        ctx.fillRect(p.x - p.sz, p.y - p.sz, p.sz * 4, p.sz * 4);
+        ctx.globalAlpha = Math.min(1, alpha * 1.4);
+        ctx.fillStyle = `rgb(255,180,140)`;
+        ctx.fillRect(p.x, p.y, p.sz, p.sz);
+      } else {
+        ctx.globalAlpha = alpha * 0.85;
+        if (p.flicker > 0.2) {
+          ctx.fillStyle = `rgb(${R},${G},${B})`;
+          ctx.fillRect(p.x, p.y, p.sz, p.sz);
+        } else {
+          ctx.strokeStyle = `rgb(${R},${G},${B})`;
+          ctx.lineWidth = 1;
+          ctx.strokeRect(p.x + 0.5, p.y + 0.5, p.sz - 1, p.sz - 1);
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // fade out on the right edge
+    const fadeW = W * 0.25;
+    const fade = ctx.createLinearGradient(W - fadeW, 0, W, 0);
+    fade.addColorStop(0, 'rgba(10,10,10,0)');
+    fade.addColorStop(1, 'rgba(10,10,10,1)');
+    ctx.fillStyle = fade;
+    ctx.fillRect(W - fadeW, 0, fadeW, H);
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+})();
+
+// SCROLL REVEAL
+(function() {
+  const targets = document.querySelectorAll(
+    'h1, h2, h3, h4, h5, h6, p, li, a.btn-outline, .fw-tag, .summit-tag, .mandate-sub, .mandate-desc, .wcard, .mem-card, .anchored-bold, .port-sub, .legacy-quote, .legacy-join, .footer-simple p'
+  );
+  targets.forEach(el => {
+    if (!el.closest('nav')) el.classList.add('reveal');
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+</body>
+</html>

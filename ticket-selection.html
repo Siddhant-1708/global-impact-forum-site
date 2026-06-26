@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enrollment — Global Impact Forum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --accent: #E84B26; --bg: #0a0a0a; --text: #ffffff; --muted: #888; --border: rgba(255,255,255,0.12); }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 18px 60px; background: rgba(10,10,10,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img { height: 52px; }
+  .nav-logo-text .t1 { font-size: 20px; font-weight: 800; color: #fff; display: block; }
+  .nav-logo-text .t2 { font-size: 10px; color: #aaa; letter-spacing: 0.14em; text-transform: uppercase; display: block; }
+
+  .page { max-width: 780px; margin: 0 auto; padding: 140px 40px 100px; }
+
+  .steps { display: flex; align-items: center; margin-bottom: 60px; }
+  .step { display: flex; align-items: center; gap: 10px; }
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: #222; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #555; flex-shrink: 0; }
+  .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step.done .step-num { background: #333; border-color: #555; color: #aaa; }
+  .step-label { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
+  .step.active .step-label { color: #fff; }
+  .step-line { flex: 1; height: 1px; background: var(--border); margin: 0 12px; }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-title { font-size: clamp(28px, 3.5vw, 44px); font-weight: 900; margin-bottom: 8px; }
+  .red { color: var(--accent); }
+  .panel-sub { font-size: 16px; color: var(--muted); margin-bottom: 40px; }
+
+  .ticket-cards { display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px; }
+  .tcard { border: 2px solid var(--border); padding: 22px 24px; cursor: pointer; display: flex; align-items: center; gap: 18px; transition: border-color 0.2s; }
+  .tcard:hover { border-color: rgba(232,75,38,0.5); }
+  .tcard.selected { border-color: var(--accent); background: rgba(232,75,38,0.06); }
+  .tcard-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #444; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .tcard.selected .tcard-radio { border-color: var(--accent); }
+  .tcard.selected .tcard-radio::after { content:''; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); display: block; }
+  .tcard-left { flex: 1; }
+  .tcard-left h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .tcard-left p { font-size: 13px; color: var(--muted); }
+  .tcard-price { font-size: 22px; font-weight: 800; flex-shrink: 0; }
+
+  .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+  .field label { font-size: 11px; color: #666; letter-spacing: 0.09em; text-transform: uppercase; font-weight: 600; }
+  .field input, .field select { background: #141414; border: 1px solid var(--border); color: #fff; padding: 13px 15px; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; appearance: none; }
+  .field input:focus, .field select:focus { border-color: var(--accent); }
+  .field select option { background: #141414; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .summary-box { background: #111; border: 1px solid var(--border); padding: 28px 24px; margin-bottom: 28px; }
+  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row .lbl { font-size: 14px; color: var(--muted); }
+  .summary-row .val { font-size: 14px; font-weight: 600; }
+  .summary-row.total .lbl { font-size: 17px; font-weight: 800; color: #fff; }
+  .summary-row.total .val { font-size: 20px; font-weight: 900; color: var(--accent); }
+
+  .btn-fill { display: block; width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; letter-spacing: 0.04em; transition: opacity 0.2s; text-align: center; text-decoration: none; }
+  .btn-fill:hover { opacity: 0.85; }
+  .btn-outline { display: block; width: 100%; padding: 14px; background: transparent; color: #aaa; border: 1px solid var(--border); font-size: 14px; font-weight: 600; font-family: inherit; cursor: pointer; letter-spacing: 0.04em; transition: color 0.2s, border-color 0.2s; text-align: center; margin-top: 12px; text-decoration: none; }
+  .btn-outline:hover { color: #fff; border-color: #fff; }
+  .field input.invalid, .field select.invalid { border-color: var(--accent); }
+  .err { font-size: 11px; color: var(--accent); margin-top: 3px; display: none; }
+  .err.show { display: block; }
+
+  .confirm-icon { width: 68px; height: 68px; border-radius: 50%; background: rgba(232,75,38,0.12); border: 2px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 30px; margin-bottom: 28px; color: var(--accent); }
+  .confirm-detail { background: #111; border: 1px solid var(--border); padding: 26px; margin: 28px 0; }
+  .confirm-detail p { font-size: 15px; color: #ccc; line-height: 1.85; }
+  .confirm-detail strong { color: #fff; }
+
+  footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex; justify-content: space-between; }
+  footer p { font-size: 13px; color: #444; }
+  footer a { color: #444; text-decoration: none; }
+  footer a:hover { color: #fff; }
+  .nav-hamburger { display: none; background: none; border: none; cursor: pointer; padding: 6px; flex-direction: column; gap: 5px; }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: #fff; transition: transform 0.25s, opacity 0.2s; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-hamburger { display: flex; }
+    .page { padding: 100px 20px 60px; }
+    .steps { overflow-x: auto; padding-bottom: 4px; }
+    .step-label { display: none; }
+    .step-line { min-width: 20px; }
+    .row2 { grid-template-columns: 1fr; }
+    footer { padding: 28px 20px; flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
+    <div class="nav-logo-text"><span class="t1">GLOBAL</span><span class="t2">Impact Forum</span></div>
+  </a>
+</nav>
+
+<div class="page">
+  <div class="steps">
+    <div class="step active" id="s1"><div class="step-num">1</div><div class="step-label">Select Plan</div></div>
+    <div class="step-line"></div>
+    <div class="step" id="s2"><div class="step-num">2</div><div class="step-label">Your Details</div></div>
+    <div class="step-line"></div>
+    <div class="step" id="s3"><div class="step-num">3</div><div class="step-label">Review</div></div>
+    <div class="step-line"></div>
+    <div class="step" id="s4"><div class="step-num">4</div><div class="step-label">Confirmed</div></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="panel active" id="p1">
+    <div class="panel-title">Select Your <span class="red">Membership</span></div>
+    <div class="panel-sub">Choose the tier that best fits your goals.</div>
+    <div class="ticket-cards">
+      <div class="tcard selected" onclick="selectTicket(this,'Premium Membership','5,50,000')">
+        <div class="tcard-radio"></div>
+        <div class="tcard-left">
+          <h3>Premium Membership</h3>
+          <p>India + Zurich conclaves, Advisory access, diplomatic delegations</p>
+        </div>
+        <div class="tcard-price">&#8377;5.50L</div>
+      </div>
+      <div class="tcard" onclick="selectTicket(this,'Annual Membership','1,00,000')">
+        <div class="tcard-radio"></div>
+        <div class="tcard-left">
+          <h3>Annual Membership</h3>
+          <p>India forums, sector councils, thought leadership network</p>
+        </div>
+        <div class="tcard-price">&#8377;1L</div>
+      </div>
+      <div class="tcard" onclick="selectTicket(this,'Y-GIF Membership','1,00,000')">
+        <div class="tcard-radio"></div>
+        <div class="tcard-left">
+          <h3>Y-GIF Membership</h3>
+          <p>Young Leaders Forum, mentorship, global fellowship exposure</p>
+        </div>
+        <div class="tcard-price">&#8377;1L</div>
+      </div>
+    </div>
+    <button class="btn-fill" onclick="goStep(2)">Continue &rarr;</button>
+    <a href="membership-landing.html" class="btn-outline">Back to Membership</a>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="panel" id="p2">
+    <div class="panel-title">Your <span class="red">Details</span></div>
+    <div class="panel-sub">Please provide your professional information.</div>
+    <div class="row2">
+      <div class="field"><label>First Name *</label><input type="text" id="fname" placeholder="Rajesh"><span class="err" id="err-fname"></span></div>
+      <div class="field"><label>Last Name *</label><input type="text" id="lname" placeholder="Sharma"><span class="err" id="err-lname"></span></div>
+    </div>
+    <div class="field"><label>Email Address *</label><input type="email" id="email" placeholder="rajesh@company.com"><span class="err" id="err-email"></span></div>
+    <div class="field"><label>Phone Number</label><input type="tel" id="phone" placeholder="+91 98765 43210"><span class="err" id="err-phone"></span></div>
+    <div class="field"><label>Organisation / Company *</label><input type="text" id="org" placeholder="Your company name"><span class="err" id="err-org"></span></div>
+    <div class="field"><label>Designation *</label><input type="text" id="desig" placeholder="CEO / MD / Director"><span class="err" id="err-desig"></span></div>
+    <div class="field">
+      <label>Sector *</label>
+      <select id="sector">
+        <option value="">Select your sector...</option>
+        <option>Real Estate &amp; Infrastructure</option>
+        <option>BFSI &amp; Capital Markets</option>
+        <option>Technology &amp; Innovation</option>
+        <option>ESG &amp; Sustainability</option>
+        <option>Education &amp; Academia</option>
+        <option>Healthcare &amp; Life Sciences</option>
+        <option>Agriculture &amp; Rural Development</option>
+        <option>Policy &amp; Governance</option>
+        <option>Diplomacy &amp; International Affairs</option>
+        <option>Other</option>
+      </select>
+      <span class="err" id="err-sector"></span>
+    </div>
+    <button class="btn-fill" onclick="validateStep2()">Review Order &rarr;</button>
+    <button class="btn-outline" onclick="goStep(1)">Back</button>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="panel" id="p3">
+    <div class="panel-title">Review Your <span class="red">Order</span></div>
+    <div class="panel-sub">Confirm the details before proceeding to payment.</div>
+    <div class="summary-box" id="summaryBox"></div>
+    <button class="btn-fill" onclick="goStep(4)">Confirm &amp; Pay &rarr;</button>
+    <button class="btn-outline" onclick="goStep(2)">Back</button>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="panel" id="p4">
+    <div class="confirm-icon">&#10003;</div>
+    <div class="panel-title">Enrollment <span class="red">Confirmed!</span></div>
+    <div class="panel-sub">Welcome to the Global Impact Forum family.</div>
+    <div class="confirm-detail">
+      <p>A confirmation email has been sent to <strong id="confEmail">your email</strong>.<br>
+      Your GIF membership kit and conclave access details will be shared within <strong>5 business days</strong>.<br><br>
+      For any queries, contact <strong>membership@globalimpactforum.in</strong></p>
+    </div>
+    <a href="index.html" class="btn-fill">Return to Home</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Global Impact Forum. All rights reserved.</p>
+  <p><a href="index.html">Home</a> &nbsp;&middot;&nbsp; <a href="contact.html">Contact</a></p>
+</footer>
+
+<script>
+let selectedPlan = { name: 'Premium Membership', price: '5,50,000' };
+
+function validateStep2() {
+  let ok = true;
+  function req(id, errId, msg) {
+    const el = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!el.value.trim()) {
+      el.classList.add('invalid'); err.textContent = msg; err.classList.add('show'); ok = false;
+    } else { el.classList.remove('invalid'); err.classList.remove('show'); }
+  }
+  req('fname', 'err-fname', 'First name is required.');
+  req('lname', 'err-lname', 'Last name is required.');
+  req('org',   'err-org',   'Organisation is required.');
+  req('desig', 'err-desig', 'Designation is required.');
+
+  // Email
+  const eEl = document.getElementById('email'), eErr = document.getElementById('err-email');
+  const eVal = eEl.value.trim();
+  if (!eVal) {
+    eEl.classList.add('invalid'); eErr.textContent = 'Email address is required.'; eErr.classList.add('show'); ok = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(eVal)) {
+    eEl.classList.add('invalid'); eErr.textContent = 'Enter a valid email address.'; eErr.classList.add('show'); ok = false;
+  } else { eEl.classList.remove('invalid'); eErr.classList.remove('show'); }
+
+  // Phone (optional — validate format if filled)
+  const pEl = document.getElementById('phone'), pErr = document.getElementById('err-phone');
+  const pVal = pEl.value.trim();
+  if (pVal && !/^\+?[\d\s\-\(\)]{7,15}$/.test(pVal)) {
+    pEl.classList.add('invalid'); pErr.textContent = 'Enter a valid phone number.'; pErr.classList.add('show'); ok = false;
+  } else { pEl.classList.remove('invalid'); pErr.classList.remove('show'); }
+
+  // Sector
+  const sEl = document.getElementById('sector'), sErr = document.getElementById('err-sector');
+  if (!sEl.value) {
+    sEl.classList.add('invalid'); sErr.textContent = 'Please select your sector.'; sErr.classList.add('show'); ok = false;
+  } else { sEl.classList.remove('invalid'); sErr.classList.remove('show'); }
+
+  if (ok) goStep(3);
+}
+
+// Clear error on input
+['fname','lname','email','phone','org','desig','sector'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', () => {
+    el.classList.remove('invalid');
+    const err = document.getElementById('err-' + id);
+    if (err) err.classList.remove('show');
+  });
+});
+
+function selectTicket(el, name, price) {
+  document.querySelectorAll('.tcard').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPlan = { name, price };
+}
+
+function goStep(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById('p'+i).classList.toggle('active', i===n);
+    const s = document.getElementById('s'+i);
+    s.classList.remove('active','done');
+    if (i===n) s.classList.add('active');
+    else if (i<n) s.classList.add('done');
+  });
+  if (n===3) renderSummary();
+  if (n===4) {
+    const em = document.getElementById('email').value;
+    document.getElementById('confEmail').textContent = em || 'your email';
+  }
+  window.scrollTo(0,0);
+}
+
+function renderSummary() {
+  const f = v => document.getElementById(v).value || '—';
+  document.getElementById('summaryBox').innerHTML = `
+    <div class="summary-row"><span class="lbl">Membership</span><span class="val">${selectedPlan.name}</span></div>
+    <div class="summary-row"><span class="lbl">Name</span><span class="val">${f('fname')} ${f('lname')}</span></div>
+    <div class="summary-row"><span class="lbl">Email</span><span class="val">${f('email')}</span></div>
+    <div class="summary-row"><span class="lbl">Organisation</span><span class="val">${f('org')}</span></div>
+    <div class="summary-row"><span class="lbl">Duration</span><span class="val">1 Year</span></div>
+    <div class="summary-row total"><span class="lbl">Total</span><span class="val">&#8377;${selectedPlan.price}</span></div>
+  `;
+}
+</script>
+<script>
+const h=document.getElementById('navHamburger'),n=document.querySelector('.nav-links');
+if(h&&n){h.addEventListener('click',()=>{h.classList.toggle('open');n.classList.toggle('open');});n.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{h.classList.remove('open');n.classList.remove('open');}));}
+</script>
+</body>
+</html>
