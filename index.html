@@ -39,8 +39,8 @@
   .nav-logo-text .t2 { font-size: 9px; font-weight: 500; letter-spacing: 0.18em; color: #aaa; text-transform: uppercase; }
   .nav-links { display: flex; gap: 44px; list-style: none; }
   .nav-links a { color: #ddd; text-decoration: none; font-size: 15px; font-weight: 500; transition: color 0.2s; }
-  .nav-apply { padding: 10px 22px; border: 1.5px solid var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; transition: background 0.2s; white-space: nowrap; }
-  .nav-apply:hover { background: var(--accent); }
+  .nav-apply { padding: 10px 22px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; transition: opacity 0.2s; white-space: nowrap; }
+  .nav-apply:hover { opacity: 0.85; }
   .nav-links a:hover, .nav-links a.active { color: #fff; }
 
   /* HERO */
@@ -57,7 +57,7 @@
   .hero-desc { font-size: clamp(14px, 1.3vw, 17px); color: #bbb; line-height: 1.75; max-width: 720px; margin: 0 auto 56px; }
   .hero-cta-label { font-size: clamp(22px, 2vw, 30px); font-weight: 700; margin-bottom: 22px; }
   .btn-outline {
-    display: inline-block; padding: 15px 44px; border: 2px solid var(--accent);
+    display: inline-block; padding: 15px 44px; border: 2px solid var(--accent); background: var(--accent);
     color: #fff; text-decoration: none; font-size: 15px; font-weight: 600;
     letter-spacing: 0.05em; transition: background 0.2s;
   }
@@ -361,7 +361,8 @@
 
   /* FRAMEWORK */
   .framework { display: grid; grid-template-columns: 1fr 1fr; background: #0f0f0f; }
-  .framework-img { overflow: hidden; max-height: 500px; }
+  .framework-img { overflow: hidden; max-height: 500px; position: relative; }
+  .framework-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, transparent 50%, #141414 100%); pointer-events: none; }
   .framework-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3) brightness(0.8); display: block; }
   .framework-text { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; background: #141414; }
   .fw-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 20px; }
@@ -370,7 +371,8 @@
 
   /* GIF SUMMIT */
   .gif-summit { background: #0a0a0a; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 56px 80px; position: relative; overflow: hidden; }
-  #summitWave { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.7; }
+  #summitWave { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.7; z-index: 0; }
+  .summit-inner { position: relative; z-index: 1; }
   .summit-inner { display: flex; align-items: center; justify-content: space-between; gap: 48px; max-width: 1200px; margin: 0 auto; }
   .summit-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 12px; }
   .summit-left h2 { font-size: clamp(26px, 3vw, 44px); font-weight: 900; margin-bottom: 10px; }
@@ -727,7 +729,7 @@
 
 <!-- PORTFOLIO -->
 <section class="portfolio" id="events">
-  <h2 class="sec-title">The Ecosystem Portfolio: <span class="red">The APG Global Portfolio</span></h2>
+  <h2 class="sec-title"><span class="red">The APG Global Portfolio</span></h2>
   <p class="port-sub">A comprehensive, interconnected ecosystem driving global progress across critical sectors.</p>
   <div class="port-track" id="portTrack">
     <div class="port-img-card"><img src="imgs/Property 1=1.png" alt="Portfolio 1"></div>
@@ -900,13 +902,12 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     }
     ctx.globalAlpha = 1;
 
-    // fade out on the right edge
-    const fadeW = W * 0.25;
-    const fade = ctx.createLinearGradient(W - fadeW, 0, W, 0);
+    // fade out near the right edge
+    const fade = ctx.createLinearGradient(W * 0.7, 0, W * 0.95, 0);
     fade.addColorStop(0, 'rgba(10,10,10,0)');
     fade.addColorStop(1, 'rgba(10,10,10,1)');
     ctx.fillStyle = fade;
-    ctx.fillRect(W - fadeW, 0, fadeW, H);
+    ctx.fillRect(W * 0.7, 0, W * 0.3, H);
 
     requestAnimationFrame(draw);
   }
@@ -928,7 +929,8 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+      } else {
+        entry.target.classList.remove('visible');
       }
     });
   }, { threshold: 0.12 });
