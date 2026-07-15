@@ -41,6 +41,38 @@
   .nav-links a { color: #ddd; text-decoration: none; font-size: 15px; font-weight: 500; transition: color 0.2s; }
   .nav-apply { padding: 10px 22px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; transition: opacity 0.2s; white-space: nowrap; }
   .nav-apply:hover { opacity: 0.85; }
+
+  /* PROFILE AVATAR */
+  .nav-profile { position: relative; }
+  .nav-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #000; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--accent); cursor: pointer;
+    letter-spacing: 0.03em; transition: box-shadow 0.2s; flex-shrink: 0;
+    user-select: none; overflow: hidden;
+  }
+  .nav-avatar:hover { box-shadow: 0 0 0 3px rgba(232,75,38,0.25); }
+  .nav-profile-drop {
+    display: none; position: absolute; top: calc(100% + 12px); right: 0;
+    background: #1a1a1a; border: 1px solid rgba(255,255,255,0.13);
+    min-width: 180px; z-index: 999; box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
+  .nav-profile-drop.open { display: block; }
+  .nav-profile-drop-header {
+    padding: 14px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-profile-drop-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-profile-drop-email { font-size: 11px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-profile-drop-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; font-size: 14px; color: #ccc; cursor: pointer;
+    transition: background 0.15s, color 0.15s; border: none; background: none;
+    width: 100%; text-align: left; font-family: inherit;
+  }
+  .nav-profile-drop-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .nav-profile-drop-item.danger:hover { background: rgba(232,75,38,0.1); color: var(--accent); }
+  .nav-profile-drop-icon { font-size: 15px; width: 18px; text-align: center; }
   .nav-links a:hover, .nav-links a.active { color: #fff; }
 
   /* HERO */
@@ -69,6 +101,26 @@
     letter-spacing: 0.04em; transition: opacity 0.2s; cursor: pointer; font-family: inherit;
   }
   .btn-fill:hover { opacity: 0.85; }
+
+  /* SPEAKERS PREVIEW */
+  .speakers-preview { padding: 100px 60px; background: #0a0a0a; text-align: center; }
+  .speakers-preview .sec-title { text-align: center; margin-bottom: 12px; }
+  .speakers-preview-sub { font-size: 16px; color: #888; max-width: 640px; margin: 0 auto 56px; line-height: 1.7; }
+  .speaker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1280px; margin: 0 auto 48px; }
+  .speaker-card {
+    display: block; text-decoration: none; border: 1px solid rgba(255,255,255,0.1);
+    background: #141414; padding: 32px 20px 26px; transition: border-color 0.2s, transform 0.2s;
+  }
+  .speaker-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .speaker-avatar {
+    width: 84px; height: 84px; border-radius: 50%; margin: 0 auto 18px;
+    background: #000; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 0.03em;
+  }
+  .speaker-name { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+  .speaker-role { font-size: 12px; color: #888; line-height: 1.6; }
+  .speaker-role .red { color: var(--accent); }
 
   /* WHY GIF */
   .why-gif {
@@ -424,6 +476,88 @@
   .footer-simple { background: #080808; border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 60px; text-align: center; }
   .footer-simple p { font-size: 12px; color: #333; letter-spacing: 0.1em; text-transform: uppercase; }
 
+  /* EDIT PROFILE MODAL */
+  .ep-overlay {
+    display: none; position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(6px);
+    align-items: center; justify-content: center; padding: 24px;
+    overflow-y: auto;
+  }
+  .ep-overlay.open { display: flex; }
+  .ep-box {
+    background: #141414; border: 1px solid rgba(255,255,255,0.13);
+    width: 100%; max-width: 560px; padding: 48px 44px; position: relative;
+    margin: auto;
+  }
+  .ep-close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none; color: #555; font-size: 22px;
+    cursor: pointer; line-height: 1; transition: color 0.2s;
+  }
+  .ep-close:hover { color: #fff; }
+  .ep-title { font-size: 22px; font-weight: 800; margin-bottom: 32px; }
+
+  /* PHOTO */
+  .ep-photo-row { display: flex; align-items: center; gap: 24px; margin-bottom: 32px; }
+  .ep-avatar-preview {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: #000; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 800; color: var(--accent); flex-shrink: 0;
+    overflow: hidden;
+  }
+  .ep-avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+  .ep-photo-btns { display: flex; flex-direction: column; gap: 8px; }
+  .ep-upload-btn {
+    padding: 9px 20px; background: none; border: 1px solid rgba(255,255,255,0.2);
+    color: #ccc; font-family: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; text-align: left;
+  }
+  .ep-upload-btn:hover { border-color: #fff; color: #fff; }
+  .ep-remove-btn {
+    padding: 9px 20px; background: none; border: 1px solid transparent;
+    color: #555; font-family: inherit; font-size: 13px; cursor: pointer;
+    transition: color 0.2s; text-align: left;
+  }
+  .ep-remove-btn:hover { color: var(--accent); }
+
+  /* FIELDS */
+  .ep-field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+  .ep-field label { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #666; }
+  .ep-field input, .ep-field textarea, .ep-field select {
+    background: #1e1e1e; border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; font-family: inherit; font-size: 14px;
+    padding: 12px 14px; outline: none; transition: border-color 0.2s;
+    appearance: none; width: 100%;
+  }
+  .ep-field input:focus, .ep-field textarea:focus, .ep-field select:focus { border-color: var(--accent); }
+  .ep-field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  .ep-field select option { background: #1e1e1e; }
+  .ep-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .eye-btn {
+    position:absolute; top:50%; right:12px; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer;
+    font-family:inherit; font-size:11px; font-weight:600;
+    letter-spacing:0.07em; text-transform:uppercase;
+    color:#555; padding:4px 2px; line-height:1; transition:color 0.2s;
+  }
+  .eye-btn:hover { color:#bbb; }
+  .eye-btn.visible { color:var(--accent); }
+  .ep-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 24px 0; }
+  .ep-section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #555; margin-bottom: 18px; }
+  .ep-save {
+    width: 100%; padding: 14px; background: var(--accent); border: none;
+    color: #fff; font-family: inherit; font-size: 15px; font-weight: 700;
+    letter-spacing: 0.04em; cursor: pointer; transition: opacity 0.2s; margin-top: 8px;
+  }
+  .ep-save:hover { opacity: 0.88; }
+  .ep-saved { text-align: center; font-size: 13px; color: #4caf80; margin-top: 12px; min-height: 18px; }
+
+  @media (max-width: 600px) {
+    .ep-box { padding: 36px 20px; }
+    .ep-two-col { grid-template-columns: 1fr; }
+  }
+
   /* SCROLL REVEAL */
   .reveal {
     opacity: 0;
@@ -460,6 +594,8 @@
     }
     .nav-links.open { display: flex; }
     .nav-links li a { display: block; padding: 14px 24px; font-size: 16px; }
+
+    .speaker-grid { grid-template-columns: repeat(2, 1fr); }
 
     /* HERO */
     .hero { padding: 100px 24px 60px; }
@@ -560,6 +696,7 @@
   /* SMALL PHONES */
   @media (max-width: 480px) {
     .com-grid { grid-template-columns: 1fr; }
+    .speaker-grid { grid-template-columns: 1fr; }
 
     .row2 { grid-template-columns: 1fr; }
     .phase-circle { width: 150px; height: 150px; font-size: 16px; }
@@ -571,17 +708,36 @@
 <nav>
   <a href="index.html" class="nav-logo">
     <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
-    <div class="nav-logo-text">
-      <span class="t1">GLOBAL</span>
-      <span class="t2">Impact Forum</span>
-    </div>
   </a>
   <ul class="nav-links">
     <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="speakers.html">Speakers</a></li>
     <li><a href="#events">Events</a></li>
     <li><a href="https://www.apglobale.com/contact-us/" target="_blank">Contact Us</a></li>
   </ul>
-  <a href="membership-landing.html" class="nav-apply">Book your Seat</a>
+  <div style="display:flex;align-items:center;gap:14px">
+    <a href="https://ticketing-platform-web-ruby.vercel.app/" class="nav-apply book-seat-link">Book your Seat</a>
+    <a href="login.html" id="navLoginBtn" style="display:none;background:#000;border:2px solid var(--accent);color:var(--accent);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:8px 18px;border-radius:6px;text-decoration:none;transition:background 0.2s,color 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='#000';this.style.color='var(--accent)'">Login / Register</a>
+    <div class="nav-profile" id="navProfile">
+      <div class="nav-avatar" id="navAvatar" title="Account"></div>
+      <div class="nav-profile-drop" id="navProfileDrop">
+        <div class="nav-profile-drop-header">
+          <div class="nav-profile-drop-name" id="dropName"></div>
+          <div class="nav-profile-drop-email" id="dropEmail"></div>
+        </div>
+        <button class="nav-profile-drop-item" id="editProfileBtn">
+          <span class="nav-profile-drop-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </span> Edit Profile
+        </button>
+        <button class="nav-profile-drop-item danger" id="logoutBtn">
+          <span class="nav-profile-drop-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </span> Log Out
+        </button>
+      </div>
+    </div>
+  </div>
   <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -594,7 +750,7 @@
     <p class="hero-sub">Guided by Purpose &bull; Defined by Health &amp; Wealth</p>
     <p class="hero-desc">The Global Impact Forum is an institutional architecture connecting business visionaries, policymakers, diplomats, investors, and academic actors. Together, we drive ethical wealth creation, champion civilisational leadership, and engineer enduring global impact.</p>
     <p class="hero-cta-label">Join The Forum</p>
-    <a href="membership-landing.html" class="btn-outline">Book your Seat</a>
+    <a href="https://ticketing-platform-web-ruby.vercel.app/" class="btn-outline book-seat-link">Book your Seat</a>
   </div>
 </section>
 
@@ -607,7 +763,7 @@
   </div>
   <div class="why-right">
     <p>The world is entering an era of profound transformation. Geo-economic turbulence, climate imperatives, technological disruption, and supply-chain realignments are rapidly redefining global power structures.</p>
-    <p>Where others see uncertainty, we establish clarity. The Global Impact Forum fills a critical global gap: not by hosting transient events, but by building enduring leadership communities that actively shape high-level dialogue, policy thinking, and collaborative international actions.</p>
+    <p>Where others see uncertainty, we establish clarity. The Global Impact Forum fills a critical global gap, not by hosting transient events, but by building enduring leadership communities that actively shape high-level dialogue, policy thinking, and collaborative international actions.</p>
   </div>
 </section>
 
@@ -632,7 +788,7 @@
       <h2>The <span class="red">GIF Summit</span></h2>
       <p>Request a seat among global architects at our upcoming high-level ticketed convergence:</p>
     </div>
-    <a href="ticket-selection.html" class="btn-fill">Book your Seat</a>
+    <a href="https://ticketing-platform-web-ruby.vercel.app/" class="btn-fill book-seat-link">Book your Seat</a>
   </div>
 </section>
 
@@ -686,46 +842,6 @@
   </div>
 </section>
 
-<!-- MEMBERSHIP -->
-<section class="membership">
-  <div class="mem-header">
-    <h2>GIF <span class="red">Membership</span></h2>
-    <p class="sub">An Investment in Influence</p>
-    <p>More than a membership. A gateway to access, credibility, and global influence.</p>
-  </div>
-  <div class="mem-grid">
-    <div class="mem-card">
-      <h3>Premium Membership</h3>
-      <ul class="mem-list">
-        <li>International conclave access</li>
-        <li>Elite forums &amp; delegations</li>
-        <li>Global leadership visibility</li>
-      </ul>
-      <div class="mem-price">Rs. 5.50 Lakh</div>
-      <a href="plan1.html" class="btn-fill">Get Started</a>
-    </div>
-    <div class="mem-card">
-      <h3>Annual Membership</h3>
-      <ul class="mem-list">
-        <li>Forums &amp; conclaves</li>
-        <li>Policy &amp; business networking</li>
-        <li>Thought leadership access</li>
-      </ul>
-      <div class="mem-price">Rs. 1 Lakh</div>
-      <a href="plan2.html" class="btn-fill">Get Started</a>
-    </div>
-    <div class="mem-card">
-      <h3>Y-GIF Membership</h3>
-      <ul class="mem-list">
-        <li>Y-GIF leadership track</li>
-        <li>Mentorship &amp; global exposure</li>
-      </ul>
-      <div class="mem-price">Rs. 1 Lakh</div>
-      <a href="plan2.html" class="btn-fill">Get Started</a>
-    </div>
-  </div>
-  <p class="mem-footer-note">This physical emblem reinforces your commitment to global impact and provides a distinct identity within the GIF community.</p>
-</section>
 
 <!-- PORTFOLIO -->
 <section class="portfolio" id="events">
@@ -769,7 +885,7 @@
     </blockquote>
     <div class="legacy-divider"></div>
     <h2 class="legacy-join">JOIN GLOBAL <span class="red">IMPACT FORUM</span></h2>
-    <a href="membership-landing.html" class="btn-outline">Book your Seat</a>
+    <a href="https://ticketing-platform-web-ruby.vercel.app/" class="btn-outline book-seat-link">Book your Seat</a>
     <div class="legacy-logos">
       <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
     </div>
@@ -782,6 +898,57 @@
 </div>
 
 <script>
+// Show avatar if logged in, else show Login/Register button
+(function() {
+  var raw = sessionStorage.getItem('gif_auth');
+  var navProfile = document.getElementById('navProfile');
+  var navLoginBtn = document.getElementById('navLoginBtn');
+  if (raw) {
+    var user = JSON.parse(raw);
+    var parts = (user.name || '').trim().split(' ');
+    var initials = parts.length >= 2
+      ? parts[0][0] + parts[parts.length - 1][0]
+      : (parts[0] || '?')[0];
+    document.getElementById('navAvatar').textContent = initials.toUpperCase();
+    document.getElementById('dropName').textContent  = user.name  || '';
+    document.getElementById('dropEmail').textContent = user.email || '';
+    navProfile.style.display = '';
+    if (navLoginBtn) navLoginBtn.style.display = 'none';
+  } else {
+    navProfile.style.display = 'none';
+    if (navLoginBtn) navLoginBtn.style.display = '';
+  }
+})();
+
+// Avatar dropdown toggle
+document.getElementById('navAvatar').addEventListener('click', function(e) {
+  e.stopPropagation();
+  document.getElementById('navProfileDrop').classList.toggle('open');
+});
+document.addEventListener('click', function(e) {
+  var profile = document.getElementById('navProfile');
+  if (profile && !profile.contains(e.target)) {
+    document.getElementById('navProfileDrop').classList.remove('open');
+  }
+});
+
+// Book your Seat — require login
+document.querySelectorAll('.book-seat-link').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    if (!sessionStorage.getItem('gif_auth')) {
+      e.preventDefault();
+      window.location.href = 'login.html';
+    }
+  });
+});
+
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  sessionStorage.removeItem('gif_auth');
+  window.location.href = 'index.html';
+});
+
+
 // Portfolio slideshow
 (function() {
   const cards = document.querySelectorAll('#portTrack .port-img-card');
@@ -920,7 +1087,7 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
 // SCROLL REVEAL
 (function() {
   const targets = document.querySelectorAll(
-    'h1, h2, h3, h4, h5, h6, p, li, a.btn-outline, .fw-tag, .summit-tag, .mandate-sub, .mandate-desc, .wcard, .mem-card, .anchored-bold, .port-sub, .legacy-quote, .legacy-join, .footer-simple p'
+    'h1, h2, h3, h4, h5, h6, p, li, a.btn-outline, .fw-tag, .summit-tag, .mandate-sub, .mandate-desc, .wcard, .mem-card, .anchored-bold, .port-sub, .legacy-quote, .legacy-join, .footer-simple p, .speaker-card, .speakers-preview-sub'
   );
   targets.forEach(el => {
     if (!el.closest('nav')) el.classList.add('reveal');
@@ -935,6 +1102,341 @@ navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+</script>
+
+<script src="countries.js"></script>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="ep-overlay" id="epOverlay">
+  <div class="ep-box">
+    <button class="ep-close" id="epClose">&times;</button>
+    <div class="ep-title">Edit Profile</div>
+
+    <!-- PHOTO -->
+    <div class="ep-photo-row">
+      <div class="ep-avatar-preview" id="epAvatarPreview"></div>
+      <div class="ep-photo-btns">
+        <button class="ep-upload-btn" id="epUploadBtn">Upload Photo</button>
+        <button class="ep-remove-btn" id="epRemoveBtn">Remove Photo</button>
+        <input type="file" id="epFileInput" accept="image/*" style="display:none">
+      </div>
+    </div>
+
+    <!-- BIO -->
+    <div class="ep-field">
+      <label>Bio</label>
+      <textarea id="epBio" placeholder="Write a short bio about yourself…"></textarea>
+    </div>
+
+    <div class="ep-divider"></div>
+    <div class="ep-section-label">Personal Details</div>
+
+    <div class="ep-two-col">
+      <div class="ep-field">
+        <label>Full Name</label>
+        <input type="text" id="epName" placeholder="Full Name">
+      </div>
+      <div class="ep-field">
+        <label>Company / Organisation</label>
+        <input type="text" id="epCompany" placeholder="Company">
+      </div>
+    </div>
+    <div class="ep-two-col">
+      <div class="ep-field">
+        <label>Designation</label>
+        <input type="text" id="epDesignation" placeholder="e.g. Managing Director">
+      </div>
+      <div class="ep-field">
+        <label>Location</label>
+        <input type="text" id="epLocation" placeholder="City, Country">
+      </div>
+    </div>
+    <div class="ep-field">
+      <label>Contact Number</label>
+      <div style="display:flex;gap:8px;position:relative">
+        <div id="epCcDropdown" style="flex:0 0 110px;position:relative;user-select:none">
+          <div id="epCcSelected" style="display:flex;align-items:center;gap:7px;background:#1e1e1e;border:1px solid rgba(255,255,255,0.1);padding:12px 10px;cursor:pointer;transition:border-color 0.2s;font-size:14px;color:#fff;height:100%">
+            <span id="epCcFlag" style="font-size:18px;line-height:1">🇮🇳</span>
+            <span id="epCcCode" style="letter-spacing:0.02em">+91</span>
+            <span style="margin-left:auto;font-size:10px;color:#666">▾</span>
+          </div>
+          <div id="epCcList" style="display:none;position:absolute;top:100%;left:0;right:0;min-width:200px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.15);z-index:600;max-height:220px;overflow-y:auto;margin-top:2px"></div>
+        </div>
+        <input type="tel" id="epPhoneNum" placeholder="98XXX XXXXX" style="flex:1;background:#1e1e1e;border:1px solid rgba(255,255,255,0.1);color:#fff;font-family:inherit;font-size:14px;padding:12px 14px;outline:none;transition:border-color 0.2s">
+        <input type="hidden" id="epCcValue" value="+91">
+      </div>
+    </div>
+
+    <div class="ep-divider"></div>
+    <div class="ep-section-label">Account</div>
+
+    <div class="ep-field">
+      <label>Email Address</label>
+      <input type="email" id="epEmail" placeholder="you@example.com">
+    </div>
+
+    <button class="ep-save" id="epSave">Save Changes</button>
+    <div class="ep-saved" id="epSaved"></div>
+
+    <div class="ep-divider"></div>
+    <div class="ep-section-label">Change Password</div>
+
+    <div class="ep-field">
+      <label>Current Password</label>
+      <div style="position:relative">
+        <input type="password" id="epCurrentPw" placeholder="Enter current password" style="width:100%;padding-right:60px">
+        <button type="button" class="eye-btn" onclick="toggleEpPw('epCurrentPw',this)" tabindex="-1">Show</button>
+      </div>
+    </div>
+    <div class="ep-two-col">
+      <div class="ep-field">
+        <label>New Password</label>
+        <div style="position:relative">
+          <input type="password" id="epNewPw" placeholder="Min. 8 characters" style="width:100%;padding-right:60px">
+          <button type="button" class="eye-btn" onclick="toggleEpPw('epNewPw',this)" tabindex="-1">Show</button>
+        </div>
+      </div>
+      <div class="ep-field">
+        <label>Confirm New Password</label>
+        <div style="position:relative">
+          <input type="password" id="epConfirmPw" placeholder="Re-enter new password" style="width:100%;padding-right:60px">
+          <button type="button" class="eye-btn" onclick="toggleEpPw('epConfirmPw',this)" tabindex="-1">Show</button>
+        </div>
+      </div>
+    </div>
+    <p id="epPwErr" style="font-size:13px;color:var(--accent);min-height:18px;margin-bottom:12px"></p>
+    <button class="ep-save" id="epSavePw">Update Password</button>
+    <div class="ep-saved" id="epPwSaved"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var overlay   = document.getElementById('epOverlay');
+  var fileInput = document.getElementById('epFileInput');
+  var preview   = document.getElementById('epAvatarPreview');
+  var savedMsg  = document.getElementById('epSaved');
+  var currentPhoto = null;
+  var currentInitials = '';
+
+  // ── Password toggle for EP modal ─────────────────────────────────────
+  window.toggleEpPw = function(inputId, btn) {
+    var input = document.getElementById(inputId);
+    var show  = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.textContent = show ? 'Hide' : 'Show';
+    btn.classList.toggle('visible', show);
+  };
+
+  // ── Change password ───────────────────────────────────────────────────
+  document.getElementById('epSavePw').addEventListener('click', function() {
+    var currentPw = document.getElementById('epCurrentPw').value;
+    var newPw     = document.getElementById('epNewPw').value;
+    var confirmPw = document.getElementById('epConfirmPw').value;
+    var err       = document.getElementById('epPwErr');
+    var saved     = document.getElementById('epPwSaved');
+
+    err.textContent   = '';
+    saved.textContent = '';
+
+    if (!currentPw || !newPw || !confirmPw) {
+      err.textContent = 'Please fill in all password fields.'; return;
+    }
+    if (newPw.length < 8) {
+      err.textContent = 'New password must be at least 8 characters.'; return;
+    }
+    if (newPw !== confirmPw) {
+      err.textContent = 'New passwords do not match.'; return;
+    }
+
+    var auth  = JSON.parse(sessionStorage.getItem('gif_auth') || '{}');
+    var users = JSON.parse(localStorage.getItem('gif_users') || '[]');
+    var idx   = users.findIndex(function(u) { return u.email === auth.email; });
+
+    if (idx === -1 || users[idx].password !== currentPw) {
+      err.textContent = 'Current password is incorrect.'; return;
+    }
+
+    // TODO: swap for POST /api/change-password { email, currentPassword, newPassword }
+    users[idx].password = newPw;
+    localStorage.setItem('gif_users', JSON.stringify(users));
+
+    document.getElementById('epCurrentPw').value = '';
+    document.getElementById('epNewPw').value      = '';
+    document.getElementById('epConfirmPw').value  = '';
+    saved.textContent = 'Password updated.';
+    setTimeout(function() { saved.textContent = ''; }, 3000);
+  });
+
+  // ── Country code dropdown ──────────────────────────────────────────────
+  var CC_LIST = window.ALL_COUNTRIES;
+  var epCcList     = document.getElementById('epCcList');
+  var epCcSelected = document.getElementById('epCcSelected');
+  var epCcFlag     = document.getElementById('epCcFlag');
+  var epCcCode     = document.getElementById('epCcCode');
+  var epCcValue    = document.getElementById('epCcValue');
+
+  CC_LIST.forEach(function(c) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;font-size:14px;color:#ccc;transition:background 0.15s';
+    item.innerHTML = '<span style="font-size:18px;line-height:1">' + c.flag + '</span>'
+                   + '<span style="flex:1">' + c.name + '</span>'
+                   + '<span style="color:#666;font-size:13px">' + c.code + '</span>';
+    item.addEventListener('mouseenter', function(){ item.style.background='rgba(232,75,38,0.12)'; });
+    item.addEventListener('mouseleave', function(){ item.style.background=''; });
+    item.addEventListener('click', function() {
+      epCcFlag.textContent = c.flag;
+      epCcCode.textContent = c.code;
+      epCcValue.value      = c.code;
+      epCcList.style.display  = 'none';
+      epCcSelected.style.borderColor = 'rgba(255,255,255,0.1)';
+    });
+    epCcList.appendChild(item);
+  });
+
+  epCcSelected.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var open = epCcList.style.display === 'block';
+    epCcList.style.display = open ? 'none' : 'block';
+    epCcSelected.style.borderColor = open ? 'rgba(255,255,255,0.1)' : 'var(--accent)';
+  });
+  document.addEventListener('click', function(e) {
+    var dd = document.getElementById('epCcDropdown');
+    if (dd && !dd.contains(e.target)) {
+      epCcList.style.display = 'none';
+      epCcSelected.style.borderColor = 'rgba(255,255,255,0.1)';
+    }
+  });
+
+  function getUser() {
+    var raw = sessionStorage.getItem('gif_auth');
+    if (!raw) return null;
+    var auth  = JSON.parse(raw);
+    var users = JSON.parse(localStorage.getItem('gif_users') || '[]');
+    return users.find(function(u) { return u.email === auth.email; }) || auth;
+  }
+
+  function renderPreview(user) {
+    preview.innerHTML = '';
+    if (user && user.photo) {
+      currentPhoto = user.photo;
+      var img = document.createElement('img');
+      img.src = user.photo;
+      preview.appendChild(img);
+    } else {
+      currentPhoto = null;
+      var parts = ((user && user.name) || '').trim().split(' ');
+      currentInitials = parts.length >= 2
+        ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase()
+        : (parts[0] || '?')[0].toUpperCase();
+      preview.textContent = currentInitials;
+    }
+  }
+
+  function openModal() {
+    var user = getUser();
+    if (!user) return;
+    renderPreview(user);
+    document.getElementById('epBio').value         = user.bio         || '';
+    document.getElementById('epName').value        = user.name        || '';
+    document.getElementById('epCompany').value     = user.company     || '';
+    document.getElementById('epDesignation').value = user.designation || '';
+    document.getElementById('epLocation').value    = user.location    || '';
+    // Pre-fill phone: split stored "+91 98XXX" into code + number
+    var phoneFull = user.phone || '';
+    var spaceIdx  = phoneFull.indexOf(' ');
+    var storedCode = spaceIdx > 0 ? phoneFull.slice(0, spaceIdx) : '+91';
+    var storedNum  = spaceIdx > 0 ? phoneFull.slice(spaceIdx + 1) : phoneFull;
+    var matchedCC  = CC_LIST.find(function(c){ return c.code === storedCode; }) || CC_LIST[0];
+    epCcFlag.textContent = matchedCC.flag;
+    epCcCode.textContent = matchedCC.code;
+    epCcValue.value      = matchedCC.code;
+    document.getElementById('epPhoneNum').value = storedNum;
+    document.getElementById('epEmail').value       = user.email       || '';
+    savedMsg.textContent = '';
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('editProfileBtn').addEventListener('click', openModal);
+  document.getElementById('epClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) closeModal(); });
+
+  // Photo upload
+  document.getElementById('epUploadBtn').addEventListener('click', function() {
+    fileInput.click();
+  });
+  fileInput.addEventListener('change', function() {
+    var file = this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      currentPhoto = e.target.result;
+      preview.innerHTML = '';
+      var img = document.createElement('img');
+      img.src = currentPhoto;
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('epRemoveBtn').addEventListener('click', function() {
+    currentPhoto = null;
+    fileInput.value = '';
+    preview.innerHTML = '';
+    preview.textContent = currentInitials;
+  });
+
+  // Save
+  document.getElementById('epSave').addEventListener('click', function() {
+    var auth  = JSON.parse(sessionStorage.getItem('gif_auth') || '{}');
+    var users = JSON.parse(localStorage.getItem('gif_users') || '[]');
+    var idx   = users.findIndex(function(u) { return u.email === auth.email; });
+
+    var updated = {
+      name:        document.getElementById('epName').value.trim()        || auth.name,
+      company:     document.getElementById('epCompany').value.trim(),
+      designation: document.getElementById('epDesignation').value.trim(),
+      location:    document.getElementById('epLocation').value.trim(),
+      phone:       (document.getElementById('epCcValue').value + ' ' + document.getElementById('epPhoneNum').value.trim()).trim(),
+      email:       document.getElementById('epEmail').value.trim()       || auth.email,
+      bio:         document.getElementById('epBio').value.trim(),
+      photo:       currentPhoto || null,
+      password:    idx >= 0 ? users[idx].password : ''
+    };
+
+    // Update users array
+    if (idx >= 0) { users[idx] = Object.assign(users[idx], updated); }
+    else          { users.push(updated); }
+    localStorage.setItem('gif_users', JSON.stringify(users));
+
+    // Update session
+    auth.name  = updated.name;
+    auth.email = updated.email;
+    sessionStorage.setItem('gif_auth', JSON.stringify(auth));
+
+    // Update nav avatar live
+    var parts = updated.name.trim().split(' ');
+    var initials = parts.length >= 2
+      ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase()
+      : (parts[0] || '?')[0].toUpperCase();
+    var navAvatar = document.getElementById('navAvatar');
+    if (updated.photo) {
+      navAvatar.innerHTML = '<img src="' + updated.photo + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+    } else {
+      navAvatar.textContent = initials;
+    }
+    document.getElementById('dropName').textContent  = updated.name;
+    document.getElementById('dropEmail').textContent = updated.email;
+
+    savedMsg.textContent = 'Changes saved.';
+    setTimeout(function() { savedMsg.textContent = ''; }, 3000);
+  });
 })();
 </script>
 </body>

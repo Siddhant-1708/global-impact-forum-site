@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — Global Impact Forum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --accent: #E84B26;
+    --bg: #0a0a0a;
+    --bg2: #141414;
+    --bg3: #1e1e1e;
+    --text: #ffffff;
+    --muted: #aaaaaa;
+    --border: rgba(255,255,255,0.13);
+  }
+  body {
+    font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    background-image: radial-gradient(ellipse at 60% 20%, rgba(232,75,38,0.06) 0%, transparent 60%);
+  }
+
+  .card {
+    width: 100%; max-width: 440px;
+    background: var(--bg2); border: 1px solid var(--border);
+    padding: 52px 44px;
+  }
+  .logo { width: 64px; margin-bottom: 28px; }
+  .card-title { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+  .card-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 32px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .tab {
+    flex: 1; padding: 10px 0; text-align: center;
+    font-size: 14px; font-weight: 600; color: #555; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s;
+  }
+  .tab.active { color: #fff; border-bottom-color: var(--accent); }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+  .field label { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: #777; }
+  .field input, .field select {
+    background: var(--bg3); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; font-family: inherit; font-size: 14px;
+    padding: 12px 14px; outline: none; transition: border-color 0.2s; appearance: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--accent); }
+  .field select option { background: var(--bg2); }
+  .field-note { font-size: 11px; color: #444; margin-top: 4px; line-height: 1.5; }
+
+  .err { font-size: 13px; color: var(--accent); min-height: 18px; margin: 2px 0 14px; }
+
+  .btn {
+    width: 100%; padding: 14px; background: var(--accent); border: none;
+    color: #fff; font-family: inherit; font-size: 15px; font-weight: 700;
+    letter-spacing: 0.04em; cursor: pointer; transition: opacity 0.2s; margin-top: 4px;
+  }
+  .btn:hover { opacity: 0.88; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
+  .divider::before, .divider::after { content:''; flex:1; height:1px; background: var(--border); }
+  .divider span { font-size: 12px; color: #444; white-space: nowrap; }
+
+  .otp-box {
+    width: 46px; height: 54px; text-align: center;
+    font-family: inherit; font-size: 22px; font-weight: 700; color: #fff;
+    background: var(--bg3); border: 1px solid rgba(255,255,255,0.12);
+    outline: none; transition: border-color 0.2s; caret-color: var(--accent);
+  }
+  .otp-box:focus { border-color: var(--accent); }
+  .otp-box.filled { border-color: rgba(255,255,255,0.35); }
+
+  .eye-btn {
+    position:absolute; top:50%; right:12px; transform:translateY(-50%);
+    background:none; border:none; cursor:pointer;
+    font-family:inherit; font-size:11px; font-weight:600;
+    letter-spacing:0.07em; text-transform:uppercase;
+    color:#555; padding:4px 2px; line-height:1; transition:color 0.2s;
+  }
+  .eye-btn:hover { color:#bbb; }
+  .eye-btn.visible { color:var(--accent); }
+
+  .success-panel { display: none; text-align: center; padding: 16px 0; }
+  .success-icon { font-size: 52px; margin-bottom: 18px; }
+  .success-panel h3 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+  .success-panel p { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 28px; }
+
+  @media (max-width: 480px) {
+    .card { padding: 36px 22px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo" class="logo">
+
+  <div id="mainArea">
+    <div class="card-title" id="cardTitle">Welcome Back</div>
+    <p class="card-sub" id="cardSub">Sign in to access the Global Impact Forum.</p>
+
+    <div class="tabs">
+      <div class="tab active" id="tabLogin" onclick="switchTab('login')">Sign In</div>
+      <div class="tab" id="tabRegister" onclick="switchTab('register')">Register</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="panel active" id="panelLogin">
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div style="position:relative">
+          <input type="password" id="loginPassword" placeholder="••••••••" style="width:100%;padding-right:44px">
+          <button type="button" class="eye-btn" onclick="togglePw('loginPassword',this)" tabindex="-1">Show</button>
+        </div>
+      </div>
+      <p class="err" id="loginErr"></p>
+      <button class="btn" id="loginBtn">Sign In</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="panel" id="panelRegister">
+      <div class="field">
+        <label>Full Name *</label>
+        <input type="text" id="regName" placeholder="e.g. Rajiv Mehta">
+      </div>
+      <div class="field">
+        <label>Company / Organisation *</label>
+        <input type="text" id="regCompany" placeholder="e.g. Mehta Capital Partners">
+      </div>
+      <div class="field">
+        <label>Contact Number *</label>
+        <div style="display:flex;gap:8px;position:relative;min-width:0;width:100%">
+          <!-- Custom flag dropdown -->
+          <div id="ccDropdown" style="flex:0 0 auto;min-width:80px;max-width:110px;position:relative;user-select:none">
+            <div id="ccSelected" style="display:flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid rgba(255,255,255,0.1);padding:12px 10px;cursor:pointer;transition:border-color 0.2s;font-size:14px;color:#fff;height:100%">
+              <span id="ccFlag" style="font-size:18px;line-height:1">🇮🇳</span>
+              <span id="ccCode" style="letter-spacing:0.02em">+91</span>
+              <span style="margin-left:auto;font-size:10px;color:#666">▾</span>
+            </div>
+            <div id="ccList" style="display:none;position:absolute;top:100%;left:0;right:0;min-width:200px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.15);z-index:500;max-height:260px;overflow-y:auto;margin-top:2px">
+            </div>
+          </div>
+          <input type="tel" id="regPhone" placeholder="98XXX XXXXX" style="flex:1;min-width:0;width:0">
+          <input type="hidden" id="regCountryCode" value="+91">
+        </div>
+        <span class="field-note">Shared only with GIF administrators.</span>
+      </div>
+      <div class="field">
+        <label>Location (City, Country) *</label>
+        <input type="text" id="regLocation" placeholder="e.g. Mumbai, India">
+      </div>
+      <div class="field">
+        <label>Designation *</label>
+        <input type="text" id="regDesignation" placeholder="e.g. Managing Director">
+      </div>
+      <div class="divider"><span>Account credentials</span></div>
+      <div class="field">
+        <label>Email Address *</label>
+        <input type="email" id="regEmail" placeholder="you@example.com" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Password *</label>
+        <div style="position:relative">
+          <input type="password" id="regPassword" placeholder="Min. 8 characters" style="width:100%;padding-right:44px">
+          <button type="button" class="eye-btn" onclick="togglePw('regPassword',this)" tabindex="-1">Show</button>
+        </div>
+        <span class="field-note">At least 8 characters.</span>
+      </div>
+      <div class="field">
+        <label>Confirm Password *</label>
+        <div style="position:relative">
+          <input type="password" id="regConfirm" placeholder="Re-enter password" style="width:100%;padding-right:44px">
+          <button type="button" class="eye-btn" onclick="togglePw('regConfirm',this)" tabindex="-1">Show</button>
+        </div>
+      </div>
+      <p class="err" id="regErr"></p>
+      <button class="btn" id="regBtn">Create Account</button>
+    </div>
+  </div>
+
+  <!-- OTP VERIFICATION STEP -->
+  <div class="success-panel" id="otpPanel">
+    <div style="font-size:40px;margin-bottom:18px">📧</div>
+    <h3>Verify Your Email</h3>
+    <p id="otpSubtext" style="font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:28px"></p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px">
+      <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+      <input class="otp-box" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]">
+    </div>
+    <p class="err" id="otpErr" style="text-align:center"></p>
+    <button class="btn" id="verifyBtn" style="margin-bottom:16px">Verify &amp; Create Account</button>
+    <div style="font-size:13px;color:#555">
+      Didn't receive it?
+      <button id="resendBtn" style="background:none;border:none;font-family:inherit;font-size:13px;color:var(--accent);cursor:pointer;font-weight:600;padding:0" disabled>
+        Resend (<span id="resendTimer">60</span>s)
+      </button>
+    </div>
+  </div>
+
+  <!-- POST-VERIFY SUCCESS -->
+  <div class="success-panel" id="successPanel">
+    <div style="font-size:52px;margin-bottom:18px">✅</div>
+    <h3>Account Created</h3>
+    <p>Your profile has been verified and submitted. You can now sign in to access the Global Impact Forum.</p>
+    <button class="btn" id="goSignIn">Go to Sign In</button>
+  </div>
+</div>
+
+<script src="countries.js"></script>
+<script>
+  // If already authenticated, go straight to the site
+  if (sessionStorage.getItem('gif_auth')) {
+    window.location.href = 'index.html';
+  }
+
+  // ── TAB SWITCH ────────────────────────────────────────────────────────────
+  function switchTab(tab) {
+    ['Login','Register'].forEach(function(t) {
+      document.getElementById('panel' + t).classList.remove('active');
+      document.getElementById('tab' + t).classList.remove('active');
+    });
+    var id = tab.charAt(0).toUpperCase() + tab.slice(1);
+    document.getElementById('panel' + id).classList.add('active');
+    document.getElementById('tab' + id).classList.add('active');
+    document.getElementById('cardTitle').textContent = tab === 'login' ? 'Welcome Back' : 'Join the Forum';
+    document.getElementById('cardSub').textContent   = tab === 'login'
+      ? 'Sign in to access the Global Impact Forum.'
+      : 'Create your member profile to access the Global Impact Forum.';
+  }
+
+  // ── LOGIN ─────────────────────────────────────────────────────────────────
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function doLogin() {
+    var email = document.getElementById('loginEmail').value.trim();
+    var pass  = document.getElementById('loginPassword').value;
+    var err   = document.getElementById('loginErr');
+    if (!email || !pass) { err.textContent = 'Please enter your email and password.'; return; }
+
+    // TODO: swap for POST /api/login  { email, password }
+    // On success the API should return { token, user: { name, email } }
+    // Store token in sessionStorage and redirect.
+    var users = JSON.parse(localStorage.getItem('gif_users') || '[]');
+    var match = users.find(function(u) { return u.email === email && u.password === pass; });
+    if (!match) { err.textContent = 'Invalid email or password.'; return; }
+
+    err.textContent = '';
+    sessionStorage.setItem('gif_auth', JSON.stringify({ name: match.name, email: match.email }));
+    window.location.href = 'index.html';
+  }
+
+  // ── REGISTER ──────────────────────────────────────────────────────────────
+  document.getElementById('regBtn').addEventListener('click', doRegister);
+
+  function doRegister() {
+    var name     = document.getElementById('regName').value.trim();
+    var company  = document.getElementById('regCompany').value.trim();
+    var countryCode  = document.getElementById('regCountryCode').value;
+    var phoneNum     = document.getElementById('regPhone').value.trim();
+    var phone        = phoneNum ? countryCode + ' ' + phoneNum : '';
+    var location     = document.getElementById('regLocation').value.trim();
+    var designation  = document.getElementById('regDesignation').value.trim();
+    var email        = document.getElementById('regEmail').value.trim();
+    var password     = document.getElementById('regPassword').value;
+    var err          = document.getElementById('regErr');
+
+    if (!name || !company || !phoneNum || !location || !designation || !email || !password) {
+      err.textContent = 'Please fill in all fields.'; return;
+    }
+    if (password.length < 8) {
+      err.textContent = 'Password must be at least 8 characters.'; return;
+    }
+    var confirm = document.getElementById('regConfirm').value;
+    if (password !== confirm) {
+      err.textContent = 'Passwords do not match.'; return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      err.textContent = 'Please enter a valid email address.'; return;
+    }
+
+    // Check duplicate before sending OTP
+    // TODO: this check moves to POST /api/register — remove localStorage lookup below
+    var users = JSON.parse(localStorage.getItem('gif_users') || '[]');
+    if (users.find(function(u) { return u.email === email; })) {
+      err.textContent = 'An account with this email already exists.'; return;
+    }
+
+    // Hold data until OTP verified — do NOT save yet
+    pendingUser = { name: name, company: company, phone: phone, location: location,
+                    designation: designation, email: email, password: password };
+
+    // TODO: swap for POST /api/send-otp { email }
+    // Backend generates + emails the code, returns { success: true }
+    err.textContent = '';
+    sendOtp(email);
+    showOtpPanel(email);
+  }
+
+  document.getElementById('goSignIn').addEventListener('click', function() {
+    document.getElementById('successPanel').style.display = 'none';
+    document.getElementById('mainArea').style.display = 'block';
+    switchTab('login');
+  });
+
+  // ── OTP ──────────────────────────────────────────────────────────────────
+  var otpCode    = null;
+  var pendingUser = null;
+  var resendInterval = null;
+
+  function showOtpPanel(email) {
+    document.getElementById('mainArea').style.display = 'none';
+    document.getElementById('otpPanel').style.display = 'block';
+    document.getElementById('otpSubtext').textContent =
+      'A 6-digit verification code has been sent to ' + email + '. Enter it below to complete your registration.';
+    document.querySelectorAll('.otp-box').forEach(function(b) { b.value = ''; b.classList.remove('filled'); });
+    document.getElementById('otpErr').textContent = '';
+    document.querySelectorAll('.otp-box')[0].focus();
+    startResendTimer();
+  }
+
+  function generateOtp() {
+    return String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  function sendOtp(email) {
+    otpCode = generateOtp();
+    // TODO: POST /api/send-otp  { email, code: otpCode }
+    // The backend should email the code and return { success: true }
+    console.log('[DEV] OTP for ' + email + ': ' + otpCode); // remove in production
+  }
+
+  function startResendTimer() {
+    var secs = 60;
+    var timerEl  = document.getElementById('resendTimer');
+    var resendBtn = document.getElementById('resendBtn');
+    resendBtn.disabled = true;
+    timerEl.textContent = secs;
+    clearInterval(resendInterval);
+    resendInterval = setInterval(function() {
+      secs--;
+      timerEl.textContent = secs;
+      if (secs <= 0) {
+        clearInterval(resendInterval);
+        resendBtn.disabled = false;
+        resendBtn.innerHTML = 'Resend code';
+      }
+    }, 1000);
+  }
+
+  document.getElementById('resendBtn').addEventListener('click', function() {
+    if (!pendingUser) return;
+    sendOtp(pendingUser.email);
+    document.querySelectorAll('.otp-box').forEach(function(b) { b.value = ''; b.classList.remove('filled'); });
+    document.getElementById('otpErr').textContent = '';
+    document.querySelectorAll('.otp-box')[0].focus();
+    this.innerHTML = 'Resend (<span id="resendTimer">60</span>s)';
+    this.disabled = true;
+    startResendTimer();
+  });
+
+  // OTP box — auto-advance, backspace, paste
+  document.querySelectorAll('.otp-box').forEach(function(box, i, boxes) {
+    box.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '').slice(-1);
+      this.classList.toggle('filled', this.value !== '');
+      if (this.value && i < boxes.length - 1) boxes[i + 1].focus();
+    });
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && i > 0) boxes[i - 1].focus();
+    });
+    box.addEventListener('paste', function(e) {
+      e.preventDefault();
+      var digits = (e.clipboardData.getData('text') || '').replace(/\D/g,'').slice(0,6).split('');
+      digits.forEach(function(d, idx) {
+        if (boxes[i + idx]) { boxes[i + idx].value = d; boxes[i + idx].classList.add('filled'); }
+      });
+      var next = Math.min(i + digits.length, boxes.length - 1);
+      boxes[next].focus();
+    });
+  });
+
+  document.getElementById('verifyBtn').addEventListener('click', function() {
+    var entered = Array.from(document.querySelectorAll('.otp-box')).map(function(b){ return b.value; }).join('');
+    var err = document.getElementById('otpErr');
+    if (entered.length < 6) { err.textContent = 'Please enter all 6 digits.'; return; }
+
+    // TODO: POST /api/verify-otp  { email: pendingUser.email, code: entered }
+    // On success: { verified: true } — then save user and show success.
+    if (entered !== otpCode) { err.textContent = 'Incorrect code. Please try again.'; return; }
+
+    // Code correct — persist user and show success
+    clearInterval(resendInterval);
+    var users = JSON.parse(localStorage.getItem('gif_users') || '[]');
+    users.push(pendingUser);
+    localStorage.setItem('gif_users', JSON.stringify(users));
+    err.textContent = '';
+    document.getElementById('otpPanel').style.display = 'none';
+    document.getElementById('successPanel').style.display = 'block';
+  });
+
+  // ── SHOW / HIDE PASSWORD ─────────────────────────────────────────────────
+  function togglePw(inputId, btn) {
+    var input = document.getElementById(inputId);
+    var show  = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.textContent = show ? 'Hide' : 'Show';
+    btn.classList.toggle('visible', show);
+  }
+
+  // ── COUNTRY CODE DROPDOWN ────────────────────────────────────────────────
+  var COUNTRIES = window.ALL_COUNTRIES;
+
+  var ccList     = document.getElementById('ccList');
+  var ccSelected = document.getElementById('ccSelected');
+  var ccFlag     = document.getElementById('ccFlag');
+  var ccCode     = document.getElementById('ccCode');
+  var ccInput    = document.getElementById('regCountryCode');
+
+  // Build list items
+  COUNTRIES.forEach(function(c) {
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;font-size:14px;color:#ccc;transition:background 0.15s';
+    item.innerHTML = '<span style="font-size:18px;line-height:1">' + c.flag + '</span>'
+                   + '<span style="flex:1">' + c.name + '</span>'
+                   + '<span style="color:#666;font-size:13px">' + c.code + '</span>';
+    item.addEventListener('mouseenter', function() { item.style.background = 'rgba(232,75,38,0.12)'; });
+    item.addEventListener('mouseleave', function() { item.style.background = ''; });
+    item.addEventListener('click', function() {
+      ccFlag.textContent  = c.flag;
+      ccCode.textContent  = c.code;
+      ccInput.value       = c.code;
+      ccList.style.display = 'none';
+      ccSelected.style.borderColor = 'rgba(255,255,255,0.1)';
+    });
+    ccList.appendChild(item);
+  });
+
+  // Toggle open/close
+  ccSelected.addEventListener('click', function() {
+    var open = ccList.style.display === 'block';
+    ccList.style.display = open ? 'none' : 'block';
+    ccSelected.style.borderColor = open ? 'rgba(255,255,255,0.1)' : 'var(--accent)';
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!document.getElementById('ccDropdown').contains(e.target)) {
+      ccList.style.display = 'none';
+      ccSelected.style.borderColor = 'rgba(255,255,255,0.1)';
+    }
+  });
+</script>
+</body>
+</html>

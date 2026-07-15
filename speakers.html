@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speakers — Global Impact Forum</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #E84B26;
+    --bg: #0a0a0a;
+    --bg2: #141414;
+    --bg3: #1e1e1e;
+    --text: #ffffff;
+    --text-muted: #aaaaaa;
+    --border: rgba(255,255,255,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px;
+    height: 72px;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; overflow: hidden; height: 72px; }
+  .nav-logo img { height: 128px; width: 128px; object-fit: contain; flex-shrink: 0; }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a { color: #ddd; text-decoration: none; font-size: 15px; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+  .nav-apply { padding: 10px 22px; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; transition: opacity 0.2s; white-space: nowrap; }
+  .nav-apply:hover { opacity: 0.85; }
+
+  /* PROFILE AVATAR */
+  .nav-profile { position: relative; }
+  .nav-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: #000; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: var(--accent); cursor: pointer;
+    letter-spacing: 0.03em; transition: box-shadow 0.2s; flex-shrink: 0;
+    user-select: none; overflow: hidden;
+  }
+  .nav-avatar:hover { box-shadow: 0 0 0 3px rgba(232,75,38,0.25); }
+  .nav-profile-drop {
+    display: none; position: absolute; top: calc(100% + 12px); right: 0;
+    background: #1a1a1a; border: 1px solid rgba(255,255,255,0.13);
+    min-width: 180px; z-index: 999; box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
+  .nav-profile-drop.open { display: block; }
+  .nav-profile-drop-header { padding: 14px 16px 10px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .nav-profile-drop-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-profile-drop-email { font-size: 11px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-profile-drop-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; font-size: 14px; color: #ccc; cursor: pointer;
+    transition: background 0.15s, color 0.15s; border: none; background: none;
+    width: 100%; text-align: left; font-family: inherit; text-decoration: none;
+  }
+  .nav-profile-drop-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+  .nav-profile-drop-item.danger:hover { background: rgba(232,75,38,0.1); color: var(--accent); }
+  .nav-profile-drop-icon { font-size: 15px; width: 18px; text-align: center; }
+
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+  .nav-hamburger span { width: 22px; height: 2px; background: #fff; transition: 0.2s; }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 160px 60px 80px; text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(232,75,38,0.08) 0%, transparent 60%);
+  }
+  .page-header .tag { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 18px; }
+  .page-header h1 { font-size: clamp(38px, 5vw, 66px); font-weight: 800; line-height: 1.08; margin-bottom: 22px; }
+  .page-header h1 .red { color: var(--accent); }
+  .page-header p { font-size: 17px; color: #999; max-width: 640px; margin: 0 auto; line-height: 1.75; }
+
+  /* FILTER PILLS */
+  .tl-filters {
+    position: sticky; top: 72px; z-index: 200;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
+    padding: 18px 24px; background: rgba(10,10,10,0.92); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .tl-pill {
+    font-family: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+    color: #aaa; background: #141414; border: 1px solid rgba(255,255,255,0.14);
+    padding: 9px 18px; border-radius: 999px; cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tl-pill:hover { border-color: var(--accent); color: #fff; }
+  .tl-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* TIMELINE */
+  .timeline-wrap { position: relative; max-width: 1000px; margin: 0 auto; padding: 90px 24px 60px; }
+  .tl-spine {
+    position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 3px; background: #3a3a3a; border-radius: 2px;
+  }
+  .tl-spine-fill {
+    position: absolute; top: 0; left: 0; width: 100%; height: 0%;
+    background: linear-gradient(to bottom, var(--accent), #ff8a5c);
+    border-radius: 2px; transition: height 0.1s linear;
+  }
+
+  .tl-milestone { position: relative; text-align: center; margin: 0 0 56px; scroll-margin-top: 140px; }
+  .tl-milestone-node {
+    position: relative; z-index: 2; width: 66px; height: 66px; margin: 0 auto 16px;
+    border-radius: 50%; background: #0a0a0a; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; transition: box-shadow 0.4s, transform 0.4s;
+  }
+  .tl-milestone-node.pulse { box-shadow: 0 0 0 12px rgba(232,75,38,0.18); transform: scale(1.08); }
+  .tl-milestone-label { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+  .tl-milestone-label .red { color: var(--accent); }
+  .tl-milestone-sub { font-size: 13px; color: #777; }
+
+  .tl-item {
+    position: relative; display: grid; grid-template-columns: 1fr 60px 1fr;
+    align-items: start; margin-bottom: 8px;
+  }
+  .tl-item.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .tl-item.reveal.visible { opacity: 1; transform: translateY(0); }
+  .tl-dot {
+    position: relative; z-index: 2; width: 18px; height: 18px; border-radius: 50%;
+    background: #0a0a0a; border: 3px solid var(--accent); justify-self: center;
+    margin-top: 30px; transition: transform 0.25s, background 0.25s;
+  }
+  .tl-item.open .tl-dot { background: var(--accent); transform: scale(1.25); }
+  .tl-side-left { grid-column: 1; padding-right: 8px; }
+  .tl-side-right { grid-column: 3; padding-left: 8px; }
+  .tl-side-empty { grid-column: 1; }
+
+  .tl-card {
+    background: #141414; border: 1px solid rgba(255,255,255,0.1);
+    padding: 22px 24px; cursor: pointer; transition: border-color 0.2s, transform 0.2s;
+    text-align: left;
+  }
+  .tl-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .tl-side-right .tl-card { text-align: left; }
+  .tf-top { display: flex; align-items: center; gap: 14px; }
+  .tf-avatar {
+    width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+    background: #000; border: 2px solid var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; color: var(--accent);
+  }
+  .tf-name { font-size: 16px; font-weight: 700; color: #fff; }
+  .tf-role { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+  .tf-company { font-size: 12px; color: #777; margin-top: 1px; }
+  .tf-toggle {
+    margin-left: auto; width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18); color: #999; background: none;
+    font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: transform 0.3s, border-color 0.2s, color 0.2s;
+  }
+  .tl-item.open .tf-toggle { transform: rotate(45deg); border-color: var(--accent); color: var(--accent); }
+  .tl-bio-wrap {
+    display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease;
+  }
+  .tl-item.open .tl-bio-wrap { grid-template-rows: 1fr; }
+  .tl-bio-inner { overflow: hidden; }
+  .tf-bio { font-size: 13.5px; color: #999; line-height: 1.7; padding-top: 14px; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+  /* CTA */
+  .speakers-cta { text-align: center; padding: 0 60px 100px; }
+  .speakers-cta p { font-size: 16px; color: #999; margin-bottom: 26px; }
+  .btn-outline {
+    display: inline-block; padding: 15px 44px; border: 2px solid var(--accent); background: var(--accent);
+    color: #fff; text-decoration: none; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.05em; transition: background 0.2s;
+  }
+  .btn-outline:hover { background: var(--accent); }
+
+  /* FOOTER */
+  .footer-simple { background: #080808; border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 60px; text-align: center; }
+  .footer-simple p { font-size: 12px; color: #333; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; position: relative; }
+    .nav-hamburger { display: flex; }
+    .nav-apply { display: none; }
+    .nav-links {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(10,10,10,0.98); border-bottom: 1px solid var(--border);
+      padding: 6px 0; z-index: 999;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links li a { display: block; padding: 14px 24px; font-size: 16px; }
+
+    .page-header { padding: 120px 24px 56px; }
+
+    .tl-filters {
+      position: sticky; top: 0; justify-content: flex-start;
+      flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tl-filters::-webkit-scrollbar { display: none; }
+    .tl-pill { white-space: nowrap; flex-shrink: 0; font-size: 11px; padding: 8px 14px; }
+
+    .timeline-wrap { padding: 40px 20px; }
+    .tl-spine { left: 27px; transform: none; }
+
+    .tl-milestone {
+      display: flex; align-items: flex-start; text-align: left; gap: 16px; margin-bottom: 40px;
+    }
+    .tl-milestone-node { position: relative; z-index: 2; margin: 0 0 0 -16px; width: 48px; height: 48px; font-size: 18px; flex-shrink: 0; }
+    .tl-milestone-label { font-size: 17px; }
+
+    .tl-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      grid-template-columns: none; margin-bottom: 20px;
+    }
+    .tl-dot { order: 1; margin-top: 28px; flex-shrink: 0; }
+    .tl-side-left, .tl-side-right { order: 2; grid-column: unset; padding: 0; flex: 1; min-width: 0; }
+    .tl-side-empty { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="imgs/7f381816365a814338d656ad47416d7f4be8b9dd.png" alt="GIF Logo">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="speakers.html" class="active">Speakers</a></li>
+    <li><a href="index.html#events">Events</a></li>
+    <li><a href="https://www.apglobale.com/contact-us/" target="_blank">Contact Us</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:14px">
+    <a href="https://ticketing-platform-web-ruby.vercel.app/" class="nav-apply book-seat-link">Book your Seat</a>
+    <a href="login.html" id="navLoginBtn" style="display:none;background:#000;border:2px solid var(--accent);color:var(--accent);font-family:inherit;font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:8px 18px;border-radius:6px;text-decoration:none;transition:background 0.2s,color 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='#000';this.style.color='var(--accent)'">Login / Register</a>
+    <div class="nav-profile" id="navProfile">
+      <div class="nav-avatar" id="navAvatar" title="Account"></div>
+      <div class="nav-profile-drop" id="navProfileDrop">
+        <div class="nav-profile-drop-header">
+          <div class="nav-profile-drop-name" id="dropName"></div>
+          <div class="nav-profile-drop-email" id="dropEmail"></div>
+        </div>
+        <a href="index.html" class="nav-profile-drop-item">
+          <span class="nav-profile-drop-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </span> Edit Profile
+        </a>
+        <button class="nav-profile-drop-item danger" id="logoutBtn">
+          <span class="nav-profile-drop-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </span> Log Out
+        </button>
+      </div>
+    </div>
+  </div>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="tag">Global Impact Forum</div>
+  <h1>Voices Shaping the <span class="red">Global Agenda</span></h1>
+  <p>Our speaker roster brings together heads of industry, policymakers, diplomats, and academic leaders united by a shared commitment to ethical wealth creation and civilisational leadership.</p>
+</div>
+
+<!-- QUICK-JUMP FILTERS -->
+<div class="tl-filters">
+  <button class="tl-pill active" data-target="top">All</button>
+  <button class="tl-pill" data-target="ms-business">Business &amp; Investment</button>
+  <button class="tl-pill" data-target="ms-policy">Policy &amp; Diplomacy</button>
+  <button class="tl-pill" data-target="ms-academia">Academia &amp; Thought Leadership</button>
+</div>
+
+<!-- SPEAKERS TIMELINE -->
+<section class="timeline-wrap" id="top">
+  <div class="tl-spine"><div class="tl-spine-fill" id="tlSpineFill"></div></div>
+
+  <div class="tl-milestone" id="ms-business">
+    <div class="tl-milestone-node"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><path d="M2 13h20"/></svg></div>
+    <div class="tl-milestone-text">
+      <div class="tl-milestone-label">Business &amp; <span class="red">Investment</span></div>
+      <div class="tl-milestone-sub">Capital, industry &amp; enterprise leadership</div>
+    </div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-left">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">DK</div>
+          <div>
+            <div class="tf-name">Dr. David Kwan</div>
+            <div class="tf-role">Chief Economist</div>
+            <div class="tf-company">Meridian Capital Group</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Dr. Kwan advises sovereign wealth funds on macroeconomic strategy and has spent two decades navigating cross-border capital markets across Asia and Europe.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-empty"></div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-empty"></div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-right">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">RN</div>
+          <div>
+            <div class="tf-name">Rajiv Nair</div>
+            <div class="tf-role">Managing Director</div>
+            <div class="tf-company">Silverline Partners</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Rajiv leads a private equity practice focused on emerging-market infrastructure, with a portfolio spanning renewable energy, logistics, and fintech.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-left">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">SM</div>
+          <div>
+            <div class="tf-name">Sofia Marchetti</div>
+            <div class="tf-role">Founder &amp; CEO</div>
+            <div class="tf-company">Vertex Sustainability</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Sofia built Vertex into a leading ESG advisory firm, helping multinational corporations align capital strategy with long-term environmental accountability.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-empty"></div>
+  </div>
+
+  <div class="tl-milestone" id="ms-policy">
+    <div class="tl-milestone-node"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+    <div class="tl-milestone-text">
+      <div class="tl-milestone-label">Policy &amp; <span class="red">Diplomacy</span></div>
+      <div class="tl-milestone-sub">Governance, trade &amp; international relations</div>
+    </div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-left">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">AR</div>
+          <div>
+            <div class="tf-name">Ambassador Anika Rao</div>
+            <div class="tf-role">Former Diplomat</div>
+            <div class="tf-company">Global Policy Council</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Ambassador Rao served in senior diplomatic postings across three continents and now advises governments on multilateral trade and security frameworks.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-empty"></div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-empty"></div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-right">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">TO</div>
+          <div>
+            <div class="tf-name">Thabo Okafor</div>
+            <div class="tf-role">Senior Policy Advisor</div>
+            <div class="tf-company">Continental Development Bureau</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Thabo shapes economic development policy across emerging markets, with a focus on infrastructure financing and regional trade integration.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-left">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">EL</div>
+          <div>
+            <div class="tf-name">Elena Larsson</div>
+            <div class="tf-role">Director, International Affairs</div>
+            <div class="tf-company">Nordic Council on Trade</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Elena has represented Nordic trade interests in high-level negotiations and specializes in sustainable supply-chain policy design.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-empty"></div>
+  </div>
+
+  <div class="tl-milestone" id="ms-academia">
+    <div class="tl-milestone-node"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 10v6"/></svg></div>
+    <div class="tl-milestone-text">
+      <div class="tl-milestone-label">Academia &amp; <span class="red">Thought Leadership</span></div>
+      <div class="tl-milestone-sub">Research, foresight &amp; institution-building</div>
+    </div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-left">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">PV</div>
+          <div>
+            <div class="tf-name">Prof. Priya Venkataraman</div>
+            <div class="tf-role">Professor of Economics</div>
+            <div class="tf-company">Whitmore School of Global Affairs</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Prof. Venkataraman researches the intersection of technology disruption and labour markets, and regularly briefs policymakers on future-of-work strategy.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-empty"></div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-empty"></div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-right">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">JM</div>
+          <div>
+            <div class="tf-name">Dr. James Mensah</div>
+            <div class="tf-role">Director of Research</div>
+            <div class="tf-company">Institute for Civilisational Studies</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Dr. Mensah's research on institution-building and generational governance has informed public-sector reform initiatives worldwide.</p>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item reveal">
+    <div class="tl-side-left">
+      <div class="tl-card" onclick="this.closest('.tl-item').classList.toggle('open')">
+        <div class="tf-top">
+          <div class="tf-avatar">HC</div>
+          <div>
+            <div class="tf-name">Dr. Helena Cortez</div>
+            <div class="tf-role">Fellow</div>
+            <div class="tf-company">Center for Strategic Foresight</div>
+          </div>
+          <button class="tf-toggle">+</button>
+        </div>
+        <div class="tl-bio-wrap"><div class="tl-bio-inner">
+          <p class="tf-bio">Dr. Cortez studies long-horizon geopolitical trends and advises multinational institutions on scenario planning and risk resilience.</p>
+        </div></div>
+      </div>
+    </div>
+    <div class="tl-dot"></div>
+    <div class="tl-side-empty"></div>
+  </div>
+
+</section>
+
+<div class="speakers-cta">
+  <p>Reserve your seat to engage directly with our speaker roster at the upcoming GIF Summit.</p>
+  <a href="https://ticketing-platform-web-ruby.vercel.app/" class="btn-outline book-seat-link">Book your Seat</a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-simple">
+  <p>&copy; 2026 GLOBAL IMPACT FORUM</p>
+</div>
+
+<script>
+// Show avatar if logged in, else show Login/Register button
+(function() {
+  var raw = sessionStorage.getItem('gif_auth');
+  var navProfile = document.getElementById('navProfile');
+  var navLoginBtn = document.getElementById('navLoginBtn');
+  if (raw) {
+    var user = JSON.parse(raw);
+    var parts = (user.name || '').trim().split(' ');
+    var initials = parts.length >= 2
+      ? parts[0][0] + parts[parts.length - 1][0]
+      : (parts[0] || '?')[0];
+    document.getElementById('navAvatar').textContent = initials.toUpperCase();
+    document.getElementById('dropName').textContent  = user.name  || '';
+    document.getElementById('dropEmail').textContent = user.email || '';
+    navProfile.style.display = '';
+    if (navLoginBtn) navLoginBtn.style.display = 'none';
+  } else {
+    navProfile.style.display = 'none';
+    if (navLoginBtn) navLoginBtn.style.display = '';
+  }
+})();
+
+// Avatar dropdown toggle
+document.getElementById('navAvatar').addEventListener('click', function(e) {
+  e.stopPropagation();
+  document.getElementById('navProfileDrop').classList.toggle('open');
+});
+document.addEventListener('click', function(e) {
+  var profile = document.getElementById('navProfile');
+  if (profile && !profile.contains(e.target)) {
+    document.getElementById('navProfileDrop').classList.remove('open');
+  }
+});
+
+// Book your Seat — require login
+document.querySelectorAll('.book-seat-link').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    if (!sessionStorage.getItem('gif_auth')) {
+      e.preventDefault();
+      window.location.href = 'login.html';
+    }
+  });
+});
+
+// Logout
+document.getElementById('logoutBtn').addEventListener('click', function() {
+  sessionStorage.removeItem('gif_auth');
+  window.location.href = 'index.html';
+});
+
+// Timeline spine scroll-fill
+(function() {
+  var wrap = document.querySelector('.timeline-wrap');
+  var spine = document.querySelector('.tl-spine');
+  var fill = document.getElementById('tlSpineFill');
+  var dots = document.querySelectorAll('.tl-dot');
+  var lastDot = dots[dots.length - 1];
+  if (!wrap || !spine || !fill || !lastDot) return;
+  function update() {
+    var total = wrap.offsetHeight;
+    spine.style.height = total + 'px';
+    var wrapRect = wrap.getBoundingClientRect();
+    var dotOffset = lastDot.getBoundingClientRect().top - wrapRect.top;
+    var vh = window.innerHeight;
+    var scrollY = window.scrollY || document.documentElement.scrollTop;
+    var wrapTopDoc = wrapRect.top + scrollY;
+    var startScroll = Math.max(0, wrapTopDoc - vh);
+    var maxScroll = Math.max(document.documentElement.scrollHeight - vh, startScroll + 1);
+    var frac = (scrollY - startScroll) / (maxScroll - startScroll);
+    frac = Math.min(Math.max(frac, 0), 1);
+    fill.style.height = (frac * dotOffset) + 'px';
+  }
+  window.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  update();
+  setTimeout(update, 300);
+})();
+
+// Timeline reveal on scroll
+(function() {
+  var items = document.querySelectorAll('.tl-item.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.2 });
+  items.forEach(function(el) { observer.observe(el); });
+})();
+
+// Filter pills — jump to milestone + pulse highlight
+(function() {
+  var pills = document.querySelectorAll('.tl-pill');
+  pills.forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      pills.forEach(function(p) { p.classList.remove('active'); });
+      pill.classList.add('active');
+      var targetId = pill.getAttribute('data-target');
+      var target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var node = target.querySelector('.tl-milestone-node');
+        if (node) {
+          node.classList.add('pulse');
+          setTimeout(function() { node.classList.remove('pulse'); }, 900);
+        }
+      }
+    });
+  });
+})();
+
+// Hamburger
+var hamburger = document.getElementById('navHamburger');
+var navLinks = document.querySelector('.nav-links');
+hamburger.addEventListener('click', function() {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
